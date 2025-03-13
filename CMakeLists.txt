@@ -30,5 +30,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(lua)
 
+FetchContent_Declare(
+  sol
+  GIT_REPOSITORY https://github.com/ThePhD/sol2.git
+  GIT_TAG v3.3.0
+)
+FetchContent_MakeAvailable(sol)
+
 add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
-target_link_libraries(${PROJECT_NAME} PRIVATE glm lua)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm lua sol)
