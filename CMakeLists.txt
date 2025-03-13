@@ -1,7 +1,4 @@
-﻿# CMakeList.txt : CMake project for TG-Engine-2D, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.14 FATAL_ERROR)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -11,11 +8,9 @@ endif()
 
 project ("TG-Engine-2D")
 
-# Add source to this project's executable.
 add_executable (TG-Engine-2D "TG-Engine-2D.cpp" "TG-Engine-2D.h")
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET TG-Engine-2D PROPERTY CXX_STANDARD 20)
-endif()
+include(FetchContent)
 
-# TODO: Add tests and install targets if needed.
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
