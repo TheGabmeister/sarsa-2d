@@ -23,6 +23,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(glm)
 
 FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui.git
+)
+FetchContent_MakeAvailable(imgui)
+
+FetchContent_Declare(
   lua
   URL https://www.lua.org/ftp/lua-5.4.7.tar.gz
   URL_HASH SHA256=9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30
@@ -38,4 +44,4 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(sol)
 
 add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
-target_link_libraries(${PROJECT_NAME} PRIVATE glm lua sol)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm imgui lua sol)
