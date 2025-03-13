@@ -43,5 +43,33 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sol)
 
+FetchContent_Declare(
+  sdl
+  URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.8/SDL3-devel-3.2.8-VC.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP true
+)
+FetchContent_MakeAvailable(sdl)
+
+FetchContent_Declare(
+  sdl-image
+  URL https://github.com/libsdl-org/SDL_image/releases/download/release-3.2.4/SDL3_image-devel-3.2.4-VC.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP true
+)
+FetchContent_MakeAvailable(sdl-image)
+
+FetchContent_Declare(
+  sdl-ttf
+  URL https://github.com/libsdl-org/SDL_ttf/releases/download/release-3.2.0/SDL3_ttf-devel-3.2.0-VC.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP true
+)
+FetchContent_MakeAvailable(sdl-ttf)
+
+FetchContent_Declare(
+  sdl-mixer
+  URL https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.8.1/SDL2_mixer-devel-2.8.1-VC.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP true
+)
+FetchContent_MakeAvailable(sdl-mixer)
+
 add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
-target_link_libraries(${PROJECT_NAME} PRIVATE glm imgui lua sol)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm imgui lua sol sdl sdl-image sdl-ttf sdl-mixer)
