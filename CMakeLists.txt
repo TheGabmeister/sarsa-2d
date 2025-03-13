@@ -13,9 +13,6 @@ include(FetchContent)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# the generic targets ALL_BUILD, ZERO_CHECK, INSTALL, PACKAGE and RUN_TESTS will be grouped into the CMakePredefinedTargets folder
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 FetchContent_Declare(
 	glm
 	GIT_REPOSITORY https://github.com/g-truc/glm.git
@@ -39,12 +36,43 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(lua)
 
-FetchContent_Declare(
-  sol
-  GIT_REPOSITORY https://github.com/ThePhD/sol2.git
-  GIT_TAG v3.3.0
+SET (LUA_DIR "${lua_SOURCE_DIR}/src")
+add_library(
+    lua STATIC
+    ${LUA_DIR}/lapi.c
+    ${LUA_DIR}/lauxlib.c
+    ${LUA_DIR}/lbaselib.c
+    ${LUA_DIR}/lcode.c
+    ${LUA_DIR}/lcorolib.c
+    ${LUA_DIR}/lctype.c
+    ${LUA_DIR}/ldblib.c
+    ${LUA_DIR}/ldebug.c
+    ${LUA_DIR}/ldo.c
+    ${LUA_DIR}/ldump.c
+    ${LUA_DIR}/lfunc.c
+    ${LUA_DIR}/lgc.c
+    ${LUA_DIR}/linit.c
+    ${LUA_DIR}/liolib.c
+    ${LUA_DIR}/llex.c
+    ${LUA_DIR}/lmathlib.c
+    ${LUA_DIR}/lmem.c
+    ${LUA_DIR}/loadlib.c
+    ${LUA_DIR}/lobject.c
+    ${LUA_DIR}/lopcodes.c
+    ${LUA_DIR}/loslib.c
+    ${LUA_DIR}/lparser.c
+    ${LUA_DIR}/lstate.c
+    ${LUA_DIR}/lstring.c
+    ${LUA_DIR}/lstrlib.c
+    ${LUA_DIR}/ltable.c
+    ${LUA_DIR}/ltablib.c
+    ${LUA_DIR}/ltm.c
+    ${LUA_DIR}/lua.c
+    ${LUA_DIR}/lundump.c
+    ${LUA_DIR}/lutf8lib.c
+    ${LUA_DIR}/lvm.c
+    ${LUA_DIR}/lzio.c
 )
-FetchContent_MakeAvailable(sol)
 
 add_library(imgui)
 
@@ -65,4 +93,12 @@ target_sources(
 )
 
 add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
-target_link_libraries(${PROJECT_NAME} PRIVATE glm imgui lua sol)
+
+target_include_directories(${PROJECT_NAME} PRIVATE LUA_DIR)
+
+target_link_libraries(
+  ${PROJECT_NAME} PRIVATE 
+  glm 
+  imgui 
+  lua 
+)
