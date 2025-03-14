@@ -23,58 +23,18 @@ FetchContent_MakeAvailable(glm)
 FetchContent_Declare(
   imgui
   GIT_REPOSITORY https://github.com/ocornut/imgui.git
-  # use docking branch instead of master
   GIT_TAG v1.91.8-docking
-  )
+)
 FetchContent_MakeAvailable(imgui)
 
-FetchContent_Declare(
-  lua
-  URL https://www.lua.org/ftp/lua-5.4.7.tar.gz
-  URL_HASH SHA256=9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30
-  DOWNLOAD_EXTRACT_TIMESTAMP true
-)
-FetchContent_MakeAvailable(lua)
-
-SET (LUA_DIR "${lua_SOURCE_DIR}/src")
 add_library(
-    lua STATIC
-    ${LUA_DIR}/lapi.c
-    ${LUA_DIR}/lauxlib.c
-    ${LUA_DIR}/lbaselib.c
-    ${LUA_DIR}/lcode.c
-    ${LUA_DIR}/lcorolib.c
-    ${LUA_DIR}/lctype.c
-    ${LUA_DIR}/ldblib.c
-    ${LUA_DIR}/ldebug.c
-    ${LUA_DIR}/ldo.c
-    ${LUA_DIR}/ldump.c
-    ${LUA_DIR}/lfunc.c
-    ${LUA_DIR}/lgc.c
-    ${LUA_DIR}/linit.c
-    ${LUA_DIR}/liolib.c
-    ${LUA_DIR}/llex.c
-    ${LUA_DIR}/lmathlib.c
-    ${LUA_DIR}/lmem.c
-    ${LUA_DIR}/loadlib.c
-    ${LUA_DIR}/lobject.c
-    ${LUA_DIR}/lopcodes.c
-    ${LUA_DIR}/loslib.c
-    ${LUA_DIR}/lparser.c
-    ${LUA_DIR}/lstate.c
-    ${LUA_DIR}/lstring.c
-    ${LUA_DIR}/lstrlib.c
-    ${LUA_DIR}/ltable.c
-    ${LUA_DIR}/ltablib.c
-    ${LUA_DIR}/ltm.c
-    ${LUA_DIR}/lua.c
-    ${LUA_DIR}/lundump.c
-    ${LUA_DIR}/lutf8lib.c
-    ${LUA_DIR}/lvm.c
-    ${LUA_DIR}/lzio.c
+  imgui STATIC
+  ${imgui_SOURCE_DIR}/imgui.cpp
+  ${imgui_SOURCE_DIR}/imgui_demo.cpp
+  ${imgui_SOURCE_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
 )
-
-add_library(imgui)
 
 target_include_directories(imgui
     PUBLIC
@@ -82,23 +42,10 @@ target_include_directories(imgui
     ${imgui_SOURCE_DIR}/backends
 )
 
-target_sources(
-    imgui
-    PUBLIC
-    ${imgui_SOURCE_DIR}/imgui.cpp
-    ${imgui_SOURCE_DIR}/imgui_demo.cpp
-    ${imgui_SOURCE_DIR}/imgui_draw.cpp
-    ${imgui_SOURCE_DIR}/imgui_tables.cpp
-    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-)
-
 add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
-
-target_include_directories(${PROJECT_NAME} PRIVATE LUA_DIR)
 
 target_link_libraries(
   ${PROJECT_NAME} PRIVATE 
   glm 
-  imgui 
-  lua 
+  imgui
 )
