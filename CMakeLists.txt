@@ -94,7 +94,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sol)
 
-add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
+add_executable (${PROJECT_NAME} 
+    "${PROJECT_SOURCE_DIR}/src/TG-Engine-2D.cpp" 
+    "${PROJECT_SOURCE_DIR}/src/TG-Engine-2D.h"
+    "${PROJECT_SOURCE_DIR}/src/script.lua"
+)
 
 target_link_libraries(
   ${PROJECT_NAME} PRIVATE 
@@ -106,4 +110,10 @@ target_link_libraries(
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${sol_SOURCE_DIR}/include
+)
+
+# This is the location of the lua scripts
+set_property(
+    TARGET ${PROJECT_NAME}
+    PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/src"
 )
