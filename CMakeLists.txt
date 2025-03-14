@@ -105,5 +105,5 @@ target_link_libraries(
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-    ${sol_SOURCE_DIR}/include/sol
+    ${sol_SOURCE_DIR}/include
 )
