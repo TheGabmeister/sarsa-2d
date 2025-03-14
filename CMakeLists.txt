@@ -93,7 +93,6 @@ FetchContent_Declare(
     GIT_TAG v3.3.0
 )
 FetchContent_MakeAvailable(sol)
-target_include_directories(sol PRIVATE ${sol_SOURCE_DIR}/include/sol)
 
 add_executable (${PROJECT_NAME} "TG-Engine-2D.cpp" "TG-Engine-2D.h")
 
@@ -102,5 +101,9 @@ target_link_libraries(
   glm 
   imgui
   lua
-  sol
+)
+
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+    ${sol_SOURCE_DIR}/include/sol
 )
