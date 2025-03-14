@@ -84,7 +84,7 @@ add_library(
     ${LUA_DIR}/lvm.c
     ${LUA_DIR}/lzio.c
 )
-target_include_directories(lua PRIVATE LUA_DIR)
+target_include_directories(lua PRIVATE ${LUA_DIR})
 
 # Fetch sol2 source code
 FetchContent_Declare(
