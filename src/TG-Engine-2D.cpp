@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
     luaFunction3(myStruct);
     myStruct.Print();
 
-    //SDL_Init(SDL_INIT_AUDIO);
+    SDL_Init(SDL_INIT_AUDIO);
     //SDL_Init(SDL_INIT_VIDEO);
     return 0;
 }

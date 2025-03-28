@@ -139,7 +139,7 @@ target_link_libraries(
   glm 
   imgui
   lua
-  #"${sdl_SOURCE_DIR}/lib/x64/SDL3.lib"
+  ${sdl_SOURCE_DIR}/lib/x64/SDL3.lib
 )
 
 target_include_directories(${PROJECT_NAME}
