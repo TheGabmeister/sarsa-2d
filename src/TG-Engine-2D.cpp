@@ -3,6 +3,7 @@
 #include <lua.hpp>
 #include <sol/sol.hpp>
 #include <stdio.h>
+#include <SDL3/SDL.h>
 
 void RandomStuff()
 {
@@ -58,7 +59,7 @@ void DoStuffToStruct(MyStruct& myStruct)
     myStruct.y = 200;
 }
 
-void main()
+int main(int argc, char* argv[])
 {
     sol::state lua{};
     lua.open_libraries(sol::lib::base);
@@ -99,4 +100,8 @@ void main()
     const std::function<void(MyStruct&)>& luaFunction3 = lua["LuaFunction3"];
     luaFunction3(myStruct);
     myStruct.Print();
+
+    //SDL_Init(SDL_INIT_AUDIO);
+    //SDL_Init(SDL_INIT_VIDEO);
+    return 0;
 }

@@ -13,10 +13,11 @@ include(FetchContent)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# glm
 FetchContent_Declare(
 	glm
 	GIT_REPOSITORY https://github.com/g-truc/glm.git
-  GIT_TAG 1.0.1
+    GIT_TAG 1.0.1
 )
 FetchContent_MakeAvailable(glm)
 
@@ -45,6 +46,7 @@ target_include_directories(imgui
 FetchContent_Declare(
     lua
     URL https://www.lua.org/ftp/lua-5.4.7.tar.gz
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(lua)
 SET (LUA_DIR "${lua_SOURCE_DIR}/src")
@@ -94,6 +96,38 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sol)
 
+# SDL
+FetchContent_Declare(
+    sdl
+    URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.8/SDL3-devel-3.2.8-VC.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(sdl)
+
+# SDL Image
+FetchContent_Declare(
+    sdl_image
+    URL https://github.com/libsdl-org/SDL_image/releases/download/release-3.2.4/SDL3_image-devel-3.2.4-VC.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(sdl_image)
+
+# SDL TTF
+FetchContent_Declare(
+    sdl_ttf
+    URL https://github.com/libsdl-org/SDL_ttf/releases/download/release-3.2.0/SDL3_ttf-devel-3.2.0-VC.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(sdl_ttf)
+
+# SDL Mixer
+FetchContent_Declare(
+    sdl_mixer
+    URL https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.8.1/SDL2_mixer-devel-2.8.1-VC.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(sdl_mixer)
+
 add_executable (${PROJECT_NAME} 
     "${PROJECT_SOURCE_DIR}/src/TG-Engine-2D.cpp" 
     "${PROJECT_SOURCE_DIR}/src/TG-Engine-2D.h"
@@ -105,11 +139,13 @@ target_link_libraries(
   glm 
   imgui
   lua
+  #"${sdl_SOURCE_DIR}/lib/x64/SDL3.lib"
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${sol_SOURCE_DIR}/include
+    ${sdl_SOURCE_DIR}/include
 )
 
 # This is the location of the lua scripts
