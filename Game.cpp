@@ -11,6 +11,7 @@ Game::~Game()
 {
 }
 
+
 void Game::Initialize() 
 {
     if (SDL_Init(SDL_INIT_VIDEO) != true) 
@@ -42,16 +43,28 @@ void Game::Initialize()
     isRunning = true;
 }
 
+void Game::Run()
+{
+    Setup();
+    while (isRunning)
+    {
+        ProcessInput();
+        Update();
+        Render();
+    }
+}
+
 void Game::ProcessInput() 
 {
     SDL_Event sdlEvent;
+
     while (SDL_PollEvent(&sdlEvent)) {
         switch (sdlEvent.type) {
         case SDL_EVENT_QUIT:
             isRunning = false;
             break;
         case SDL_EVENT_KEY_DOWN:
-            if (sdlEvent.key.down == SDLK_ESCAPE) {
+            if (sdlEvent.key.key == SDLK_ESCAPE) {
                 isRunning = false;
             }
             break;
@@ -77,16 +90,7 @@ void Game::Render()
     SDL_RenderPresent(renderer);
 }
 
-void Game::Run() 
-{
-    Setup();
-    while (isRunning) 
-    {
-        ProcessInput();
-        Update();
-        Render();
-    }
-}
+
 
 void Game::Destroy() 
 {
