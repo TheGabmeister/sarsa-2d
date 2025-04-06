@@ -84,9 +84,20 @@ void Game::Update()
 
 void Game::Render() 
 {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
+/*
+    // Loads a PNG texture
+    SDL_Surface* surface = IMG_Load("./assets/textures/car.png");
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
 
+    // What is the destination rectangle that we want to place our texture
+    SDL_Rect dstRect = { 10, 10, 32, 32 };
+    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+    SDL_DestroyTexture(texture);
+    
+*/
     SDL_RenderPresent(renderer);
 }
 
