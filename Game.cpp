@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 #include <iostream>
 
 Game::Game() 
@@ -86,18 +87,28 @@ void Game::Render()
 {
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
-/*
+
     // Loads a PNG texture
-    SDL_Surface* surface = IMG_Load("./assets/textures/car.png");
+    SDL_Surface* surface = IMG_Load("./assets/textures/car.jpg");
+    if (surface == nullptr)
+    {
+        std::cout << "Pointer is null." << std::endl;
+
+    }
+    else {
+
+        std::cout << "Pointer is not null." << std::endl;
+
+    }
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
+    SDL_DestroySurface(surface);
 
     // What is the destination rectangle that we want to place our texture
-    SDL_Rect dstRect = { 10, 10, 32, 32 };
-    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+    SDL_FRect dstRect = { 10, 10, 32, 32 };
+    SDL_RenderTexture(renderer, texture, NULL, &dstRect);
     SDL_DestroyTexture(texture);
     
-*/
+
     SDL_RenderPresent(renderer);
 }
 
