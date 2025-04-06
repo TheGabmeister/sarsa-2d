@@ -89,17 +89,7 @@ void Game::Render()
     SDL_RenderClear(renderer);
 
     // Loads a PNG texture
-    SDL_Surface* surface = IMG_Load("./assets/textures/car.jpg");
-    if (surface == nullptr)
-    {
-        std::cout << "Pointer is null." << std::endl;
-
-    }
-    else {
-
-        std::cout << "Pointer is not null." << std::endl;
-
-    }
+    SDL_Surface* surface = IMG_Load("car.png");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
 
@@ -107,7 +97,6 @@ void Game::Render()
     SDL_FRect dstRect = { 10, 10, 32, 32 };
     SDL_RenderTexture(renderer, texture, NULL, &dstRect);
     SDL_DestroyTexture(texture);
-    
 
     SDL_RenderPresent(renderer);
 }
