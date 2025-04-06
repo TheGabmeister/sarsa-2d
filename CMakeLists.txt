@@ -9,7 +9,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 add_subdirectory(thirdparty/SDL EXCLUDE_FROM_ALL)
 
-add_executable (TG-Engine-2D "Main.cpp")
+add_executable (TG-Engine-2D "Main.cpp" "Game.h" "Game.cpp")
 
 # Link to the actual SDL3 library.
 target_link_libraries(TG-Engine-2D PRIVATE SDL3::SDL3)
