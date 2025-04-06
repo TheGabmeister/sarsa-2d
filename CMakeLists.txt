@@ -6,21 +6,15 @@ project ("TG-Engine-2D")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Third-party directories
-set(SDL_DIR "${PROJECT_SOURCE_DIR}/thirdparty/SDL")
+# set the output directory for built objects.
+# This makes sure that the dynamic library goes into the build directory automatically.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
-include_directories("${SDL_DIR}/include")
-link_directories("${SDL_DIR}/lib/x64")
+# This assumes the SDL source is available in vendored/SDL
+add_subdirectory(thirdparty/SDL EXCLUDE_FROM_ALL)
 
-add_executable (TG-Engine-2D "Main.cpp" "Game.h" "Game.cpp")
+add_executable (${PROJECT_NAME} "Main.cpp" "Game.h" "Game.cpp")
 
-target_link_libraries( ${PROJECT_NAME} PRIVATE 
-  "${SDL_DIR}/lib/x64/SDL3.lib"
-)
-
-# Add .dlls into location of .exe
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-    "${SDL_DIR}/lib/x64/SDL3.dll" 
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
+# Link to the actual SDL3 library.
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
