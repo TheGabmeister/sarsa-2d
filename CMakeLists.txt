@@ -33,9 +33,16 @@ add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 add_subdirectory(thirdparty/testing EXCLUDE_FROM_ALL)
 add_subdirectory(thirdparty/whereami-cpp EXCLUDE_FROM_ALL)
 
-add_executable (${PROJECT_NAME} "Main.cpp" "Game.h" "Game.cpp")
+##############################################################################
 
-# Link to the actual SDL3 library.
+# Automatically add all .cpp and .h
+file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS 
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" 
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+)
+
+add_executable (${PROJECT_NAME} ${ENGINE_SOURCES}) 
+
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3
 	SDL3_image::SDL3_image
@@ -44,6 +51,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-	${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/testing
+	"${CMAKE_CURRENT_SOURCE_DIR}/src"
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/testing"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/whereami-cpp/include"
 )

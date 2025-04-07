@@ -3,8 +3,8 @@
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
 #include <filesystem>
-namespace fs = std::filesystem;
 #include <whereami++.hpp>
+namespace fs = std::filesystem;
 
 Game::Game() 
 {
