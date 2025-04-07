@@ -88,16 +88,13 @@ void Game::Update()
 
 void Game::Render() 
 {
-    std::cerr << whereami::executable_path() << std::endl;
-
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
 
-    fs::path texturePath = fs::path("..") / "assets" / "textures" / "car.png";
-    std::string pathStr = texturePath.string(); // Converts to OS-native format
+    std::string imagePath = whereami::executable_dir() + "/assets/textures/car.png";
 
     // Loads a PNG texture
-    SDL_Surface* surface = IMG_Load(pathStr.c_str());
+    SDL_Surface* surface = IMG_Load(imagePath.c_str());
     if (surface == nullptr) 
     {
         std::cerr << "IMG_Load Error: " << SDL_GetError() << std::endl;
