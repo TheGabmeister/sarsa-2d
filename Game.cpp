@@ -89,9 +89,20 @@ void Game::Render()
     SDL_RenderClear(renderer);
 
     // Loads a PNG texture
-    SDL_Surface* surface = IMG_Load("car.png");
+    SDL_Surface* surface = IMG_Load("../assets/textures/car.png");
+    if (surface == nullptr) 
+    {
+        std::cerr << "IMG_Load Error: " << SDL_GetError() << std::endl;
+        return;
+    }
+
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
+    if (texture == nullptr)
+    {
+        std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        return;
+    }
 
     // What is the destination rectangle that we want to place our texture
     SDL_FRect dstRect = { 10, 10, 32, 32 };
