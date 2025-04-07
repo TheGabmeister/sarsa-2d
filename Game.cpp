@@ -8,6 +8,7 @@ namespace fs = std::filesystem;
 Game::Game() 
 {
     isRunning = false;
+    //std::cerr << whereami::executable_path << std::endl;
 }
 
 Game::~Game() 
