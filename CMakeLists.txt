@@ -32,6 +32,8 @@ add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
 add_subdirectory(thirdparty/whereami-cpp EXCLUDE_FROM_ALL)
 
+add_subdirectory(thirdparty/spdlog EXCLUDE_FROM_ALL)
+
 ##############################################################################
 
 # Automatically add all .cpp and .h
@@ -46,10 +48,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3::SDL3
 	SDL3_image::SDL3_image
 	whereami-cpp
+	spdlog::spdlog_header_only
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/src"
-	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/testing"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/whereami-cpp/include"
 )
