@@ -30,7 +30,6 @@ set(SDLIMAGE_XPM OFF CACHE BOOL "Support loading XPM images" FORCE)
 set(SDLIMAGE_XV OFF CACHE BOOL "Support loading XV images" FORCE)
 add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
-add_subdirectory(thirdparty/testing EXCLUDE_FROM_ALL)
 add_subdirectory(thirdparty/whereami-cpp EXCLUDE_FROM_ALL)
 
 ##############################################################################
@@ -46,7 +45,6 @@ add_executable (${PROJECT_NAME} ${ENGINE_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3
 	SDL3_image::SDL3_image
-	testing
 	whereami-cpp
 )
 
