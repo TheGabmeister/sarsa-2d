@@ -4,11 +4,11 @@
 #include <iostream>
 #include <filesystem>
 namespace fs = std::filesystem;
+#include <whereami++.hpp>
 
 Game::Game() 
 {
     isRunning = false;
-    //std::cerr << whereami::executable_path << std::endl;
 }
 
 Game::~Game() 
@@ -88,6 +88,8 @@ void Game::Update()
 
 void Game::Render() 
 {
+    std::cerr << whereami::executable_path() << std::endl;
+
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
 
