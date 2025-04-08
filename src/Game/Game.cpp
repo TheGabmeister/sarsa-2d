@@ -3,12 +3,12 @@
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
 #include <filesystem>
-#include <whereami++.hpp>
 namespace fs = std::filesystem;
 
 Game::Game() 
 {
     isRunning = false;
+	std::cout << RESOURCES_PATH << std::endl;
 }
 
 Game::~Game() 
@@ -91,7 +91,7 @@ void Game::Render()
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
 
-    std::string imagePath = whereami::executable_dir() + "/assets/textures/car.png";
+    std::string imagePath = RESOURCES_PATH "textures/car.png";
 
     // Loads a PNG texture
     SDL_Surface* surface = IMG_Load(imagePath.c_str());
