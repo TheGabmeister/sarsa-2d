@@ -71,7 +71,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3::SDL3
 	SDL3_image::SDL3_image
 	spdlog::spdlog_header_only
-	glm
+	glm::glm-header-only
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
