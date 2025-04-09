@@ -3,8 +3,10 @@
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
 #include <spdlog/spdlog.h>
-#include <./Components/TransformComponent.h>
-#include <./Components/RigidBodyComponent.h>
+#include "../Components/TransformComponent.h"
+#include "../Components/RigidBodyComponent.h"
+#include "../Systems/MovementSystem.h"
+#include "../Systems/RenderSystem.h"
 #include <glm/glm.hpp>
 
 Game::Game() 
@@ -82,11 +84,12 @@ void Game::ProcessInput()
 
 void Game::Setup() 
 {
+	registry->AddSystem<MovementSystem>();
+    registry->GetSystem<RenderSystem>();
+
 	Entity car = registry->CreateEntity();
 	car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0,1.0), 0.0);
     car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
-
-	car.RemoveComponent<TransformComponent>();
 }
 
 void Game::Update() 
@@ -102,11 +105,11 @@ void Game::Update()
 
     // Store the "previous" frame time
     millisecsPreviousFrame = SDL_GetTicks();
+    
+    // Update the registry to process the entities that are waiting to be created/deleted
+    registry->Update();
 
-    // TODO:
-    // MovementSystem.Update();
-    // CollisionSystem.Update();
-    // DamageSystem.Update();
+    registry->GetSystem<MovementSystem>().Update(deltaTime);
 }
 
 void Game::Render() 
@@ -114,30 +117,9 @@ void Game::Render()
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
 
-    std::string imagePath = RESOURCES_PATH "textures/car.png";
+	registry->GetSystem<RenderSystem>().Update(renderer);
 
-    // Loads a PNG texture
-    SDL_Surface* surface = IMG_Load(imagePath.c_str());
-    if (surface == nullptr) 
-    {
-        spdlog::warn("IMG_Load Error: {}", SDL_GetError());
-        return;
-    }
-
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_DestroySurface(surface);
-    if (texture == nullptr)
-    {
-        spdlog::warn("SDL_CreateTextureFromSurface Error: {}", SDL_GetError());
-        return;
-    }
-
-    // What is the destination rectangle that we want to place our texture
-    SDL_FRect dstRect = { 10, 10, 32, 32 };
-    SDL_RenderTexture(renderer, texture, NULL, &dstRect);
-    SDL_DestroyTexture(texture);
-
-    SDL_RenderPresent(renderer);
+	SDL_RenderPresent(renderer);
 }
 
 
