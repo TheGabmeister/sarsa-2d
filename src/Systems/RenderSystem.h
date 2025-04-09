@@ -24,10 +24,10 @@ class RenderSystem: public System
                 const auto sprite = entity.GetComponent<SpriteComponent>();
 				
 				SDL_FRect objRect = {
-					static_cast<int>(transform.position.x),
-					static_cast<int>(transform.position.y),
-					sprite.width,
-					sprite.height
+                    transform.position.x,
+                    transform.position.y,
+                    static_cast<float>(sprite.width),
+                    static_cast<float>(sprite.height)
 				};
 
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
