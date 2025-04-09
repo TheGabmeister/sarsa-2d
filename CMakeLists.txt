@@ -39,6 +39,8 @@ add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
 add_subdirectory(thirdparty/spdlog EXCLUDE_FROM_ALL)
 
+add_subdirectory(thirdparty/glm)
+
 ##############################################################################
 
 # Automatically add all .cpp and .h
@@ -69,6 +71,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3::SDL3
 	SDL3_image::SDL3_image
 	spdlog::spdlog_header_only
+	glm
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
