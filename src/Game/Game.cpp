@@ -4,6 +4,7 @@
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <./Components/TransformComponent.h>
+#include <./Components/RigidBodyComponent.h>
 #include <glm/glm.hpp>
 
 Game::Game() 
@@ -83,6 +84,7 @@ void Game::Setup()
 {
 	Entity car = registry->CreateEntity();
 	registry->AddComponent<TransformComponent>(car, glm::vec2(10.0, 30.0), glm::vec2(1.0,1.0), 0.0);
+    registry->AddComponent<RigidBodyComponent>(car, glm::vec2(50.0, 0.0));
 }
 
 void Game::Update() 

@@ -27,13 +27,12 @@ struct IComponent {
 // Used to assign a unique id to a component type
 template <typename T>
 class Component: public IComponent {
-
-public:
-    // Returns the unique id of Component<T>
-    static int GetId() {
-        static auto id = nextId++;
-        return id;
-    }
+    public:
+        // Returns the unique id of Component<T>
+        static int GetId() {
+            static auto id = nextId++;
+            return id;
+        }
 };
 
 class Entity {
@@ -242,6 +241,8 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
     componentPool->Set(entityId, newComponent);
 
     entityComponentSignatures[entityId].set(componentId);
+
+    spdlog::info("Component id = {} was added to entity id {}", std::to_string(componentId) ,std::to_string(entityId));
 }
 
 template <typename TComponent>
