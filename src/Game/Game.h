@@ -1,5 +1,6 @@
 #pragma once
 
+#include <./ECS/ECS.h>
 #include <SDL3/SDL.h>
 
 class Game 
@@ -8,6 +9,8 @@ class Game
         bool isRunning;
         SDL_Window* window;
         SDL_Renderer* renderer;
+
+        std::unique_ptr<Registry> registry;
 
     public:
         Game();

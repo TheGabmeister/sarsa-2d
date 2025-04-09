@@ -2,17 +2,18 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <spdlog/spdlog.h>
 
 Game::Game() 
 {
     isRunning = false;
-	std::cout << RESOURCES_PATH << std::endl;
+    registry = std::make_unique<Registry>();
+    spdlog::info("Game constructor called!");
 }
 
 Game::~Game() 
 {
+    spdlog::info("Game destructor called!");
 }
 
 
@@ -20,7 +21,7 @@ void Game::Initialize()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != true) 
     {
-        std::cerr << "Error initializing SDL." << std::endl;
+        spdlog::critical("Error initializing SDL.");
         return;
     }
 
@@ -32,7 +33,7 @@ void Game::Initialize()
     );
     if (!window) 
     {
-        std::cerr << "Error creating SDL window." << std::endl;
+        spdlog::critical("Error creating SDL window.");
         return;
     }
 
@@ -40,7 +41,7 @@ void Game::Initialize()
 
     if (!renderer) 
     {
-        std::cerr << "Error creating SDL renderer." << std::endl;
+        spdlog::critical("Error creating SDL renderer.");
         return;
     }
     //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
@@ -97,7 +98,7 @@ void Game::Render()
     SDL_Surface* surface = IMG_Load(imagePath.c_str());
     if (surface == nullptr) 
     {
-        std::cerr << "IMG_Load Error: " << SDL_GetError() << std::endl;
+        spdlog::warn("IMG_Load Error: {}", SDL_GetError());
         return;
     }
 
@@ -105,7 +106,7 @@ void Game::Render()
     SDL_DestroySurface(surface);
     if (texture == nullptr)
     {
-        std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+        spdlog::warn("SDL_CreateTextureFromSurface Error: {}", SDL_GetError());
         return;
     }
 
