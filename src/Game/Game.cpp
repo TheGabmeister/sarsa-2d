@@ -83,13 +83,30 @@ void Game::ProcessInput()
 void Game::Setup() 
 {
 	Entity car = registry->CreateEntity();
-	registry->AddComponent<TransformComponent>(car, glm::vec2(10.0, 30.0), glm::vec2(1.0,1.0), 0.0);
-    registry->AddComponent<RigidBodyComponent>(car, glm::vec2(50.0, 0.0));
+	car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0,1.0), 0.0);
+    car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
+
+	car.RemoveComponent<TransformComponent>();
 }
 
 void Game::Update() 
 {
-    
+    // If we are too fast, waste some time until we reach the MILLISECS_PER_FRAME
+    int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
+    if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
+        SDL_Delay(timeToWait);
+    }
+
+    // The difference in ticks since the last frame, converted to seconds
+    double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0;
+
+    // Store the "previous" frame time
+    millisecsPreviousFrame = SDL_GetTicks();
+
+    // TODO:
+    // MovementSystem.Update();
+    // CollisionSystem.Update();
+    // DamageSystem.Update();
 }
 
 void Game::Render() 
