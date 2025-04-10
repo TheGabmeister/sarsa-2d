@@ -129,6 +129,32 @@ void Game::LoadLevel(int level)
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
+    assetStore->AddTexture(renderer, "tileset-grass-texture", RESOURCES_PATH "textures/grid.jpg");
+
+    // Load the tilemap
+    int tileSize = 64;
+    double tileScale = 1.0;
+    int mapNumCols = 4;
+    int mapNumRows = 4;
+
+    std::fstream mapFile;
+    mapFile.open(RESOURCES_PATH "level-01.map");
+
+    for (int y = 0; y < mapNumRows; y++) {
+        for (int x = 0; x < mapNumCols; x++) {
+            char ch;
+            mapFile.get(ch);
+            int srcRectY = std::atoi(&ch) * tileSize;
+            mapFile.get(ch);
+            int srcRectX = std::atoi(&ch) * tileSize;
+            mapFile.ignore();
+
+            Entity tile = registry->CreateEntity();
+            tile.AddComponent<TransformComponent>(glm::vec2(x * (tileScale * tileSize), y * (tileScale * tileSize)), glm::vec2(tileScale, tileScale), 0.0);
+            tile.AddComponent<SpriteComponent>("tileset-grass-texture", tileSize, tileSize, srcRectX, srcRectY);
+        }
+    }
+    mapFile.close();
 
     Entity car = registry->CreateEntity();
     car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
