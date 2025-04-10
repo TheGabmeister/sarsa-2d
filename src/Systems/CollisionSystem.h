@@ -49,7 +49,7 @@ class CollisionSystem: public System {
                     if (collisionHappened) {
                         spdlog::info("Entity " + std::to_string(a.GetId()) + " is colliding with entity " + std::to_string(b.GetId()));
 
-                        // TODO: emit an event...
+                        // TODO: emit an event
                     }
                 }
             }

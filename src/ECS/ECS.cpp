@@ -8,6 +8,11 @@ int Entity::GetId() const {
     return id;
 }
 
+void Entity::Kill()
+{
+	registry->KillEntity(*this);
+}
+
 void System::AddEntityToSystem(Entity entity) {
     entities.push_back(entity);
 }
@@ -43,6 +48,11 @@ Entity Registry::CreateEntity() {
     return entity;
 }
 
+void Registry::KillEntity(Entity entity) {
+    entitiesToBeKilled.insert(entity);
+    spdlog::info("Entity {} was killed", std::to_string(entity.GetId()));
+}
+
 void Registry::AddEntityToSystems(Entity entity) {
     const auto entityId = entity.GetId();
 
@@ -59,12 +69,26 @@ void Registry::AddEntityToSystems(Entity entity) {
     }
 }
 
+void Registry::RemoveEntityFromSystems(Entity entity) {
+    for (auto system : systems) {
+        system.second->RemoveEntityFromSystem(entity);
+    }
+}
+
 void Registry::Update() {
-    // Add the entities that are waiting to be created to the active Systems
-    for (auto entity: entitiesToBeAdded) {
+    // Processing the entities that are waiting to be created to the active Systems
+    for (auto entity : entitiesToBeAdded) {
         AddEntityToSystems(entity);
     }
     entitiesToBeAdded.clear();
 
-    // TODO: Remove the entities that are waiting to be killed from the active Systems
+    // Process the entities that are waiting to be killed from the active Systems
+    for (auto entity : entitiesToBeKilled) {
+        RemoveEntityFromSystems(entity);
+        entityComponentSignatures[entity.GetId()].reset();
+
+        // Make the entity id available to be reused
+        freeIds.push_back(entity.GetId());
+    }
+    entitiesToBeKilled.clear();
 }
