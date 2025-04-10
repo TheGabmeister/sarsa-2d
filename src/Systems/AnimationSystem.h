@@ -19,7 +19,6 @@ class AnimationSystem: public System {
                 auto& sprite = entity.GetComponent<SpriteComponent>();
 
                 animation.currentFrame = ((SDL_GetTicks() - animation.startTime) * animation.frameSpeedRate / 1000) % animation.numFrames;
-				spdlog::info("Entity id = {} current frame is now {}", entity.GetId(), animation.currentFrame);
                 sprite.srcRect.x = animation.currentFrame * sprite.width;
             }
         }

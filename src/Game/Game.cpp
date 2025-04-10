@@ -6,9 +6,11 @@
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../Components/BoxColliderComponent.h"
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
 #include "../Systems/AnimationSystem.h"
+#include "../Systems/CollisionSystem.h"
 #include <glm/glm.hpp>
 #include <fstream>
 
@@ -111,6 +113,7 @@ void Game::Update()
 
     registry->GetSystem<MovementSystem>().Update(deltaTime);
     registry->GetSystem<AnimationSystem>().Update();
+    registry->GetSystem<CollisionSystem>().Update();
 }
 
 void Game::Render() 
@@ -129,6 +132,7 @@ void Game::LoadLevel(int level)
     registry->AddSystem<MovementSystem>();
     registry->AddSystem<RenderSystem>();
     registry->AddSystem<AnimationSystem>();
+    registry->AddSystem<CollisionSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
@@ -162,14 +166,16 @@ void Game::LoadLevel(int level)
     */
     Entity car = registry->CreateEntity();
     car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
-    car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
+    car.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 0.0));
     car.AddComponent<SpriteComponent>("car-texture", 256, 128);
+    car.AddComponent<BoxColliderComponent>(128,128);
 
     Entity vampire = registry->CreateEntity();
-    vampire.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(5.0, 5.0), 0.0);
-    vampire.AddComponent<RigidBodyComponent>(glm::vec2(30.0, 0.0));
+    vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 0.0), glm::vec2(5.0, 5.0), 0.0);
+    vampire.AddComponent<RigidBodyComponent>(glm::vec2(-30.0, 0.0));
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
     vampire.AddComponent<AnimationComponent>(16, 15, true);
+    vampire.AddComponent<BoxColliderComponent>(128, 128);
 }
 
 void Game::Destroy() 
