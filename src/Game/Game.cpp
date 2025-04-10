@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Components/SpriteComponent.h"
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
 #include <glm/glm.hpp>
@@ -13,6 +14,7 @@ Game::Game()
 {
     isRunning = false;
     registry = std::make_unique<Registry>();
+    assetStore = std::make_unique<AssetStore>();
     spdlog::info("Game constructor called!");
 }
 
@@ -87,15 +89,13 @@ void Game::Setup()
 	registry->AddSystem<MovementSystem>();
     registry->AddSystem<RenderSystem>();
 
+    // Adding assets to the asset store
+    assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
+
 	Entity car = registry->CreateEntity();
 	car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0,1.0), 0.0);
     car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
-    car.AddComponent<SpriteComponent>(10, 10);
-
-    Entity truck = registry->CreateEntity();
-    truck.AddComponent<TransformComponent>(glm::vec2(50.0, 100.0), glm::vec2(1.0, 1.0), 0.0);
-    truck.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 50.0));
-    truck.AddComponent<SpriteComponent>(10, 50);
+    car.AddComponent<SpriteComponent>("car-texture",256, 128);
 }
 
 
@@ -124,7 +124,8 @@ void Game::Render()
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     SDL_RenderClear(renderer);
 
-	registry->GetSystem<RenderSystem>().Update(renderer);
+    // Invoke all the systems that need to render 
+    registry->GetSystem<RenderSystem>().Update(renderer, assetStore);
 
 	SDL_RenderPresent(renderer);
 }

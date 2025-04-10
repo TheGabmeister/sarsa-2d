@@ -1,6 +1,7 @@
 #pragma once
 
-#include <./ECS/ECS.h>
+#include "../ECS/ECS.h"
+#include "../AssetStore/AssetStore.h"
 #include <SDL3/SDL.h>
 
 const int FPS = 60;
@@ -15,6 +16,7 @@ class Game
         SDL_Renderer* renderer;
 
         std::unique_ptr<Registry> registry;
+        std::unique_ptr<AssetStore> assetStore;
 
     public:
         Game();

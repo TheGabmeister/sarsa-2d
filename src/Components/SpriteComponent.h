@@ -1,13 +1,25 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <string>
+#include <SDL3/SDL.h>
 
-struct SpriteComponent {
+struct SpriteComponent 
+{
+    std::string assetId;
     int width;
     int height;
+    SDL_FRect srcRect;
 
-    SpriteComponent(int width = 0, int height = 0) {
+    SpriteComponent(std::string assetId = "", int width = 0, int height = 0, int srcRectX = 0, int srcRectY = 0) 
+    {
+        this->assetId = assetId;
         this->width = width;
         this->height = height;
+        this->srcRect = { 
+            static_cast<float>(srcRectX),
+            static_cast<float>(srcRectY),
+            static_cast<float>(width),
+            static_cast<float>(height)
+        };
     }
 };
