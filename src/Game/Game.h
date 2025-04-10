@@ -2,6 +2,7 @@
 
 #include "../ECS/ECS.h"
 #include "../AssetStore/AssetStore.h"
+#include "../EventBus/EventBus.h"
 #include <SDL3/SDL.h>
 
 const int FPS = 60;
@@ -18,6 +19,7 @@ class Game
 
         std::unique_ptr<Registry> registry;
         std::unique_ptr<AssetStore> assetStore;
+        std::unique_ptr<EventBus> eventBus;
 
     public:
         Game();
