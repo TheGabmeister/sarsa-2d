@@ -9,6 +9,7 @@
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
 #include <glm/glm.hpp>
+#include <fstream>
 
 Game::Game() 
 {
@@ -86,16 +87,7 @@ void Game::ProcessInput()
 
 void Game::Setup() 
 {
-	registry->AddSystem<MovementSystem>();
-    registry->AddSystem<RenderSystem>();
-
-    // Adding assets to the asset store
-    assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
-
-	Entity car = registry->CreateEntity();
-	car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0,1.0), 0.0);
-    car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
-    car.AddComponent<SpriteComponent>("car-texture",256, 128);
+    LoadLevel(1);
 }
 
 
@@ -130,7 +122,19 @@ void Game::Render()
 	SDL_RenderPresent(renderer);
 }
 
+void Game::LoadLevel(int level)
+{
+    registry->AddSystem<MovementSystem>();
+    registry->AddSystem<RenderSystem>();
 
+    // Adding assets to the asset store
+    assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
+
+    Entity car = registry->CreateEntity();
+    car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
+    car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
+    car.AddComponent<SpriteComponent>("car-texture", 256, 128);
+}
 
 void Game::Destroy() 
 {
