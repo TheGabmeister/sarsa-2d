@@ -26,11 +26,11 @@ class MovementSystem: public System
 				transform.position.x += rigidbody.velocity.x * deltaTime;
 				transform.position.y += rigidbody.velocity.y * deltaTime;
 				
-                spdlog::info("Entity id = {} position is now {},{}", 
+                /*spdlog::info("Entity id = {} position is now {},{}", 
                     entity.GetId(), 
                     std::to_string(transform.position.x), 
                     transform.position.y
-                );
+                );*/
             }
         }
 };

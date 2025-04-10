@@ -8,6 +8,7 @@
 #include "../Components/SpriteComponent.h"
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
+#include "../Systems/AnimationSystem.h"
 #include <glm/glm.hpp>
 #include <fstream>
 
@@ -109,6 +110,7 @@ void Game::Update()
     registry->Update();
 
     registry->GetSystem<MovementSystem>().Update(deltaTime);
+    registry->GetSystem<AnimationSystem>().Update();
 }
 
 void Game::Render() 
@@ -126,17 +128,19 @@ void Game::LoadLevel(int level)
 {
     registry->AddSystem<MovementSystem>();
     registry->AddSystem<RenderSystem>();
+    registry->AddSystem<AnimationSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
     assetStore->AddTexture(renderer, "tileset-grass-texture", RESOURCES_PATH "textures/grid.jpg");
+    assetStore->AddTexture(renderer, "vampire-texture", RESOURCES_PATH "textures/enemies-vampire-attack.png");
 
     // Load the tilemap
     int tileSize = 64;
     double tileScale = 1.0;
     int mapNumCols = 4;
     int mapNumRows = 4;
-
+    /*
     std::fstream mapFile;
     mapFile.open(RESOURCES_PATH "level-01.map");
 
@@ -155,11 +159,17 @@ void Game::LoadLevel(int level)
         }
     }
     mapFile.close();
-
+    */
     Entity car = registry->CreateEntity();
     car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
     car.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
     car.AddComponent<SpriteComponent>("car-texture", 256, 128);
+
+    Entity vampire = registry->CreateEntity();
+    vampire.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(5.0, 5.0), 0.0);
+    vampire.AddComponent<RigidBodyComponent>(glm::vec2(30.0, 0.0));
+    vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
+    vampire.AddComponent<AnimationComponent>(16, 15, true);
 }
 
 void Game::Destroy() 
