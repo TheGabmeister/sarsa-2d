@@ -9,6 +9,7 @@
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/CameraFollowComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
+#include "../Components/HealthComponent.h"
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
 #include "../Systems/AnimationSystem.h"
@@ -18,6 +19,7 @@
 #include "../Systems/KeyboardControlSystem.h"
 #include "../Systems/CameraMovementSystem.h"
 #include "../Systems/ProjectileEmitSystem.h"
+#include "../Systems/ProjectileLifecycleSystem.h"
 #include "../Events/KeyPressedEvent.h"
 #include <glm/glm.hpp>
 #include <fstream>
@@ -139,6 +141,7 @@ void Game::Update()
     eventBus->Reset();
     registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
     registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(eventBus);
+    registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
 
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
@@ -148,6 +151,7 @@ void Game::Update()
     registry->GetSystem<CollisionSystem>().Update(eventBus);
     //registry->GetSystem<CameraMovementSystem>().Update(camera);
     registry->GetSystem<ProjectileEmitSystem>().Update(registry);
+    registry->GetSystem<ProjectileLifecycleSystem>().Update();
 }
 
 void Game::Render() 
@@ -174,6 +178,7 @@ void Game::LoadLevel(int level)
     registry->AddSystem<KeyboardControlSystem>();
     registry->AddSystem<CameraMovementSystem>();
     registry->AddSystem<ProjectileEmitSystem>();
+    registry->AddSystem<ProjectileLifecycleSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
@@ -200,7 +205,12 @@ void Game::LoadLevel(int level)
             mapFile.ignore();
 
             Entity tile = registry->CreateEntity();
-            tile.AddComponent<TransformComponent>(glm::vec2(x * (tileScale * tileSize), y * (tileScale * tileSize)), glm::vec2(tileScale, tileScale), 0.0);
+            tile.AddComponent<TransformComponent>(
+                glm::vec2(x * (tileScale * tileSize), 
+                y * (tileScale * tileSize)), 
+                glm::vec2(tileScale, tileScale), 
+                0.0
+            );
             tile.AddComponent<SpriteComponent>("tileset-grass-texture", tileSize, tileSize, 0, false, srcRectX, srcRectY);
         }
     }
@@ -215,7 +225,8 @@ void Game::LoadLevel(int level)
     car.AddComponent<BoxColliderComponent>(128,128);
     car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -200), glm::vec2(200, 0), glm::vec2(0, 200), glm::vec2(-200, 0));
     car.AddComponent<CameraFollowComponent>();
-    car.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0, 0.0), 5000, 10000, 0, false);
+    car.AddComponent<ProjectileEmitterComponent>(glm::vec2(1000.0, 1000.0), 0, 3000, 0, false);
+    car.AddComponent<HealthComponent>(100);
 
     Entity vampire = registry->CreateEntity();
     vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
@@ -223,7 +234,8 @@ void Game::LoadLevel(int level)
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
     vampire.AddComponent<AnimationComponent>(16, 15, true);
     vampire.AddComponent<BoxColliderComponent>(32, 32);
-    vampire.AddComponent<ProjectileEmitterComponent>(glm::vec2(0.0, 100.0), 2000, 10000, 0, false);
+    vampire.AddComponent<ProjectileEmitterComponent>(glm::vec2(0.0, 100.0), 2000, 5000, 0, false);
+    vampire.AddComponent<HealthComponent>(100);
 }
 
 void Game::Destroy() 

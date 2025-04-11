@@ -18,7 +18,7 @@ set(PRODUCTION_BUILD OFF CACHE BOOL "Make this a production build" FORCE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
-add_subdirectory(thirdparty/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(thirdparty/SDL EXCLUDE_FROM_ALL) 
 
 # Turn off unsupported image types. Only allow BMP, JPG, and PNG
 set(SDLIMAGE_AVIF OFF CACHE BOOL "Support loading AVIF images" FORCE)
