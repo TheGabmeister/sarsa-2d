@@ -185,13 +185,14 @@ void Game::LoadLevel(int level)
     */
     Entity car = registry->CreateEntity();
     car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
-    car.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 0.0));
+    car.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     car.AddComponent<SpriteComponent>("car-texture", 256, 128);
     car.AddComponent<BoxColliderComponent>(128,128);
+    car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -20), glm::vec2(20, 0), glm::vec2(0, 20), glm::vec2(-20, 0));
 
     Entity vampire = registry->CreateEntity();
     vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 0.0), glm::vec2(5.0, 5.0), 0.0);
-    vampire.AddComponent<RigidBodyComponent>(glm::vec2(-30.0, 0.0));
+    vampire.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
     vampire.AddComponent<AnimationComponent>(16, 15, true);
     vampire.AddComponent<BoxColliderComponent>(128, 128);
