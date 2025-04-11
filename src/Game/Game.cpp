@@ -219,6 +219,7 @@ void Game::LoadLevel(int level)
     mapHeight = mapNumRows * tileSize * tileScale;
     
     Entity car = registry->CreateEntity();
+    car.Tag("player");
     car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
     car.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     car.AddComponent<SpriteComponent>("car-texture", 256, 128, 1);
@@ -229,6 +230,7 @@ void Game::LoadLevel(int level)
     car.AddComponent<HealthComponent>(100);
 
     Entity vampire = registry->CreateEntity();
+    vampire.Group("enemies");
     vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
     vampire.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
