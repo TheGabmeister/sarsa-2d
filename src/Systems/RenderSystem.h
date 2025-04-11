@@ -16,7 +16,7 @@ class RenderSystem: public System
             RequireComponent<SpriteComponent>();
         }
 
-        void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore)
+        void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_FRect& camera)
         {
             // Create a vector with both Sprite and Transform component of all entities
             struct RenderableEntity {
@@ -47,10 +47,10 @@ class RenderSystem: public System
 
                 // Set the destination rectangle with the x,y position to be rendered
                 SDL_FRect dstRect = {
-                    (transform.position.x),
-                    (transform.position.y),
-                    (sprite.width * transform.scale.x),
-                    (sprite.height * transform.scale.y)
+                    transform.position.x - (sprite.isFixed ? 0 : camera.x),
+                    transform.position.y - (sprite.isFixed ? 0 : camera.y),
+                    sprite.width * transform.scale.x,
+                    sprite.height * transform.scale.y
                 };
 
                 // Render the texture on the destination renderer window

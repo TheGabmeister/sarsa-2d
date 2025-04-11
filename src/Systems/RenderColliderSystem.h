@@ -13,16 +13,16 @@ class RenderColliderSystem: public System {
             RequireComponent<BoxColliderComponent>();
         }
 
-        void Update(SDL_Renderer* renderer) {
+        void Update(SDL_Renderer* renderer, SDL_FRect& camera) {
             for (auto entity: GetSystemEntities()) {
                 const auto transform = entity.GetComponent<TransformComponent>();
                 const auto collider = entity.GetComponent<BoxColliderComponent>();
 
                 SDL_FRect colliderRect = {
-                    transform.position.x + collider.offset.x,
-                    transform.position.y + collider.offset.y,
-                    static_cast<float>(collider.width),
-                    static_cast<float>(collider.height)
+                    transform.position.x + collider.offset.x - camera.x,
+                    transform.position.y + collider.offset.y - camera.y,
+                    collider.width * transform.scale.x,
+                    collider.height * transform.scale.y
                 };
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
                 SDL_RenderRect(renderer, &colliderRect);

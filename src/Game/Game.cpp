@@ -7,6 +7,7 @@
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/BoxColliderComponent.h"
+#include "../Components/CameraFollowComponent.h"
 #include "../Systems/MovementSystem.h"
 #include "../Systems/RenderSystem.h"
 #include "../Systems/AnimationSystem.h"
@@ -14,9 +15,15 @@
 #include "../Systems/RenderColliderSystem.h"
 #include "../Systems/DamageSystem.h"
 #include "../Systems/KeyboardControlSystem.h"
+#include "../Systems/CameraMovementSystem.h"
 #include "../Events/KeyPressedEvent.h"
 #include <glm/glm.hpp>
 #include <fstream>
+
+int Game::windowWidth;
+int Game::windowHeight;
+int Game::mapWidth;
+int Game::mapHeight;
 
 Game::Game() 
 {
@@ -44,8 +51,8 @@ void Game::Initialize()
 
     window = SDL_CreateWindow(
         "GameWindow",
-        800,
-        600,
+        1280,
+        720,
         SDL_WINDOW_RESIZABLE
     );
     if (!window) 
@@ -61,6 +68,15 @@ void Game::Initialize()
         spdlog::critical("Error creating SDL renderer.");
         return;
     }
+
+    //SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+
+    // game camera initialize
+    camera.x = 0;
+    camera.y = 0;
+    camera.w = windowWidth;
+    camera.h = windowHeight;
+
     //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
     isRunning = true;
 }
@@ -128,6 +144,7 @@ void Game::Update()
     registry->GetSystem<MovementSystem>().Update(deltaTime);
     registry->GetSystem<AnimationSystem>().Update();
     registry->GetSystem<CollisionSystem>().Update(eventBus);
+    //registry->GetSystem<CameraMovementSystem>().Update(camera);
 }
 
 void Game::Render() 
@@ -136,9 +153,9 @@ void Game::Render()
     SDL_RenderClear(renderer);
 
     // Invoke all the systems that need to render 
-    registry->GetSystem<RenderSystem>().Update(renderer, assetStore);
+    registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
     if (isDebug) {
-        registry->GetSystem<RenderColliderSystem>().Update(renderer);
+        registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
     }
 	SDL_RenderPresent(renderer);
 }
@@ -152,6 +169,7 @@ void Game::LoadLevel(int level)
     registry->AddSystem<RenderColliderSystem>();
     registry->AddSystem<DamageSystem>();
     registry->AddSystem<KeyboardControlSystem>();
+    registry->AddSystem<CameraMovementSystem>();
 
     // Adding assets to the asset store
     assetStore->AddTexture(renderer, "car-texture", RESOURCES_PATH "textures/car.png");
@@ -163,7 +181,7 @@ void Game::LoadLevel(int level)
     double tileScale = 1.0;
     int mapNumCols = 4;
     int mapNumRows = 4;
-    /*
+    
     std::fstream mapFile;
     mapFile.open(RESOURCES_PATH "level-01.map");
 
@@ -182,20 +200,23 @@ void Game::LoadLevel(int level)
         }
     }
     mapFile.close();
-    */
+    mapWidth = mapNumCols * tileSize * tileScale;
+    mapHeight = mapNumRows * tileSize * tileScale;
+    
     Entity car = registry->CreateEntity();
     car.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
     car.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     car.AddComponent<SpriteComponent>("car-texture", 256, 128);
     car.AddComponent<BoxColliderComponent>(128,128);
-    car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -20), glm::vec2(20, 0), glm::vec2(0, 20), glm::vec2(-20, 0));
+    car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -200), glm::vec2(200, 0), glm::vec2(0, 200), glm::vec2(-200, 0));
+    car.AddComponent<CameraFollowComponent>();
 
     Entity vampire = registry->CreateEntity();
-    vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 0.0), glm::vec2(5.0, 5.0), 0.0);
+    vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
     vampire.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
     vampire.AddComponent<AnimationComponent>(16, 15, true);
-    vampire.AddComponent<BoxColliderComponent>(128, 128);
+    vampire.AddComponent<BoxColliderComponent>(32, 32);
 }
 
 void Game::Destroy() 

@@ -16,6 +16,7 @@ class Game
         int millisecsPreviousFrame = 0;
         SDL_Window* window;
         SDL_Renderer* renderer;
+        SDL_FRect camera;
 
         std::unique_ptr<Registry> registry;
         std::unique_ptr<AssetStore> assetStore;
@@ -32,4 +33,9 @@ class Game
         void Render();
         void Destroy();
 		void LoadLevel(int level);
+
+        static int windowWidth;
+        static int windowHeight;
+        static int mapWidth;
+        static int mapHeight;
 };
