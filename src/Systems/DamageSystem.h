@@ -20,8 +20,8 @@ class DamageSystem: public System {
             spdlog::info("The Damage system received an event collision between entities {} and {}",
                 std::to_string(event.a.GetId()),
                 std::to_string(event.b.GetId()));
-            event.a.Kill();
-            event.b.Kill();
+            //event.a.Kill();
+            //event.b.Kill();
         }
 
         void Update() {
