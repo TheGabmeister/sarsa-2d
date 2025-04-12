@@ -54,7 +54,7 @@ class ProjectileEmitSystem: public System {
                         projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
                         projectile.AddComponent<RigidBodyComponent>(projectileVelocity);
                         projectile.AddComponent<SpriteComponent>("ball-texture", 32, 32, 4);
-                        projectile.AddComponent<BoxColliderComponent>(4, 4);
+                        projectile.AddComponent<BoxColliderComponent>(32, 32);
                         projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly, projectileEmitter.hitPercentDamage, projectileEmitter.projectileDuration);
                     }
                 }
@@ -86,7 +86,7 @@ class ProjectileEmitSystem: public System {
                     projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
                     projectile.AddComponent<RigidBodyComponent>(projectileEmitter.projectileVelocity);
                     projectile.AddComponent<SpriteComponent>("ball-texture", 32, 32, 4);
-                    projectile.AddComponent<BoxColliderComponent>(4, 4);
+                    projectile.AddComponent<BoxColliderComponent>(32, 32);
                     projectile.AddComponent<ProjectileComponent>(
                         projectileEmitter.isFriendly, 
                         projectileEmitter.hitPercentDamage,

@@ -21,8 +21,8 @@ class RenderColliderSystem: public System {
                 SDL_FRect colliderRect = {
                     transform.position.x + collider.offset.x - camera.x,
                     transform.position.y + collider.offset.y - camera.y,
-                    collider.width * transform.scale.x,
-                    collider.height * transform.scale.y
+                    collider.width,
+                    collider.height
                 };
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
                 SDL_RenderRect(renderer, &colliderRect);

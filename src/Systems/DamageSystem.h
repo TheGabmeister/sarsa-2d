@@ -32,11 +32,11 @@ class DamageSystem: public System {
             }
 
             if (a.BelongsToGroup("projectiles") && b.BelongsToGroup("enemies")) {
-                // TODO: OnProjectileHitsEnemy(...);
+                OnProjectileHitsEnemy(a, b); // "a" is the projectile, "b" is the enemy
             }
 
             if (b.BelongsToGroup("projectiles") && a.BelongsToGroup("enemies")) {
-                // TODO: OnProjectileHitsEnemy(...);
+                OnProjectileHitsEnemy(b, a); // "a" is the projectile, "b" is the enemy
             }
         }
 
@@ -56,6 +56,26 @@ class DamageSystem: public System {
                 }
 
                 // Kill the projectile
+                projectile.Kill();
+            }
+        }
+
+        void OnProjectileHitsEnemy(Entity projectile, Entity enemy) {
+            const auto projectileComponent = projectile.GetComponent<ProjectileComponent>();
+
+            // Only damage the enemy if projectile is friendly
+            if (projectileComponent.isFriendly) {
+                auto& health = enemy.GetComponent<HealthComponent>();
+
+                // Subtract from enemy health
+                health.healthPercentage -= projectileComponent.hitPercentDamage;
+
+                // Kills the enemy if health reaches zero
+                if (health.healthPercentage <= 0) {
+                    enemy.Kill();
+                }
+
+                // Destroy projectile
                 projectile.Kill();
             }
         }

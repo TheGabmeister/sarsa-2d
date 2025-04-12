@@ -225,19 +225,19 @@ void Game::LoadLevel(int level)
     car.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     car.AddComponent<SpriteComponent>("car-texture", 256, 128, 1);
     car.AddComponent<BoxColliderComponent>(128,128);
-    car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -200), glm::vec2(200, 0), glm::vec2(0, 200), glm::vec2(-200, 0));
+    car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -100), glm::vec2(100, 0), glm::vec2(0, 100), glm::vec2(-100, 0));
     car.AddComponent<CameraFollowComponent>();
-    car.AddComponent<ProjectileEmitterComponent>(glm::vec2(1000.0, 1000.0), 0, 3000, 10, false);
+    car.AddComponent<ProjectileEmitterComponent>(glm::vec2(1000.0, 1000.0), 0, 3000, 10, true);
     car.AddComponent<HealthComponent>(100);
 
     Entity vampire = registry->CreateEntity();
     vampire.Group("enemies");
-    vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 100.0), glm::vec2(3.0, 3.0), 0.0);
+    vampire.AddComponent<TransformComponent>(glm::vec2(500.0, 100.0), glm::vec2(2.0, 2.0), 0.0);
     vampire.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
     vampire.AddComponent<AnimationComponent>(16, 15, true);
-    vampire.AddComponent<BoxColliderComponent>(32, 32);
-    vampire.AddComponent<ProjectileEmitterComponent>(glm::vec2(0.0, 100.0), 2000, 5000, 10, false);
+    vampire.AddComponent<BoxColliderComponent>(64, 64);
+    vampire.AddComponent<ProjectileEmitterComponent>(glm::vec2(0.0, 100.0), 0, 5000, 10, false);
     vampire.AddComponent<HealthComponent>(100);
 }
 

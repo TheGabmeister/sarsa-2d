@@ -6,7 +6,6 @@
 #include "../Events/CollisionEvent.h"
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/TransformComponent.h"
-#include <spdlog/spdlog.h>
 
 class CollisionSystem: public System {
     public:
@@ -49,7 +48,7 @@ class CollisionSystem: public System {
                     );
 
                     if (collisionHappened) {
-                        spdlog::info("Entity " + std::to_string(a.GetId()) + " is colliding with entity " + std::to_string(b.GetId()));
+                        spdlog::info("Entity {} is colliding with entity {}", std::to_string(a.GetId()), std::to_string(b.GetId()));
 
 						eventBus->EmitEvent<CollisionEvent>(a, b);
                     }
