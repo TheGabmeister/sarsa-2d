@@ -205,6 +205,7 @@ void Game::LoadLevel(int level)
             mapFile.ignore();
 
             Entity tile = registry->CreateEntity();
+            tile.Group("tiles");
             tile.AddComponent<TransformComponent>(
                 glm::vec2(x * (tileScale * tileSize), 
                 y * (tileScale * tileSize)), 
@@ -226,7 +227,7 @@ void Game::LoadLevel(int level)
     car.AddComponent<BoxColliderComponent>(128,128);
     car.AddComponent<KeyboardControlledComponent>(glm::vec2(0, -200), glm::vec2(200, 0), glm::vec2(0, 200), glm::vec2(-200, 0));
     car.AddComponent<CameraFollowComponent>();
-    car.AddComponent<ProjectileEmitterComponent>(glm::vec2(1000.0, 1000.0), 0, 3000, 0, false);
+    car.AddComponent<ProjectileEmitterComponent>(glm::vec2(1000.0, 1000.0), 0, 3000, 10, false);
     car.AddComponent<HealthComponent>(100);
 
     Entity vampire = registry->CreateEntity();
@@ -236,7 +237,7 @@ void Game::LoadLevel(int level)
     vampire.AddComponent<SpriteComponent>("vampire-texture", 32, 32, 1);
     vampire.AddComponent<AnimationComponent>(16, 15, true);
     vampire.AddComponent<BoxColliderComponent>(32, 32);
-    vampire.AddComponent<ProjectileEmitterComponent>(glm::vec2(0.0, 100.0), 2000, 5000, 0, false);
+    vampire.AddComponent<ProjectileEmitterComponent>(glm::vec2(0.0, 100.0), 2000, 5000, 10, false);
     vampire.AddComponent<HealthComponent>(100);
 }
 
