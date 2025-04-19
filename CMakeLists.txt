@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-project ("TG-Engine-2D")
+project ("sarsa-2d")
 
 # imgui and sol requires modern c++
 set(CMAKE_CXX_STANDARD 17)
@@ -38,8 +38,8 @@ set(SDLIMAGE_XV OFF CACHE BOOL "Support loading XV images" FORCE)
 add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
 add_subdirectory(thirdparty/spdlog EXCLUDE_FROM_ALL)
-
-add_subdirectory(thirdparty/glm)
+add_subdirectory(thirdparty/glm EXCLUDE_FROM_ALL)
+add_subdirectory(thirdparty/EnTT EXCLUDE_FROM_ALL)
 
 ##############################################################################
 
@@ -72,6 +72,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3_image::SDL3_image
 	spdlog::spdlog_header_only
 	glm::glm-header-only
+	EnTT::EnTT
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
