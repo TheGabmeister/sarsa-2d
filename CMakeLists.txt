@@ -18,7 +18,12 @@ set(PRODUCTION_BUILD OFF CACHE BOOL "Make this a production build" FORCE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
+set(SDL2_LIBRARY "E:/Personal_Projects/2025/Game Engine 2D/pikuma-2d-engine/build/Debug/SDL3.dll")  # Or SDL2.lib on Windows
+set(SDL2_INCLUDE_DIR "E:/Personal_Projects/2025/Game Engine 2D/pikuma-2d-engine/thirdparty/SDL/include/SDL3") 
+
 add_subdirectory(thirdparty/SDL EXCLUDE_FROM_ALL) 
+add_subdirectory(thirdparty/SDL_mixer EXCLUDE_FROM_ALL) 
+add_subdirectory(thirdparty/SDL_ttf EXCLUDE_FROM_ALL) 
 
 # Turn off unsupported image types. Only allow BMP, JPG, and PNG
 set(SDLIMAGE_AVIF OFF CACHE BOOL "Support loading AVIF images" FORCE)
