@@ -17,12 +17,12 @@
 #include "../Systems/RenderGUISystem.h"
 #include "../Systems/ScriptSystem.h"
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_image.h>
-#include <SDL3/SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <glm/glm.hpp>
-#include <imgui/imgui.h>
-#include <imgui/imgui_sdl.h>
-#include <imgui/imgui_impl_sdl.h>
+#include <imgui.h>
+#include <backends/imgui_impl_sdl3.h>
+#include <backends/imgui_impl_sdlrenderer3.h>
 
 int Game::windowWidth;
 int Game::windowHeight;
@@ -43,7 +43,7 @@ Game::~Game() {
 }
 
 void Game::Initialize() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         Logger::Err("Error initializing SDL.");
         return;
     }
@@ -51,14 +51,14 @@ void Game::Initialize() {
         Logger::Err("Error initializing SDL TTF.");
         return;
     }
-    SDL_DisplayMode displayMode;
-    SDL_GetCurrentDisplayMode(0, &displayMode);
-    windowWidth = displayMode.w;
-    windowHeight = displayMode.h;
+    //SDL_DisplayMode displayMode;
+    //SDL_GetCurrentDisplayMode(0, &displayMode);
+    //windowWidth = displayMode.w;
+    //windowHeight = displayMode.h;
+    windowWidth = 800;
+    windowHeight = 600;
     window = SDL_CreateWindow(
-        NULL,
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
+        "pikuma-2d-engine",
         windowWidth,
         windowHeight,
         SDL_WINDOW_BORDERLESS
@@ -67,15 +67,21 @@ void Game::Initialize() {
         Logger::Err("Error creating SDL window.");
         return;
     }
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(window, "game-renderer");
     if (!renderer) {
         Logger::Err("Error creating SDL renderer.");
         return;
     }
 
     // Initialize the ImGui context
+    IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiSDL::Initialize(renderer, windowWidth, windowHeight);
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
+    ImGui_ImplSDLRenderer3_Init(renderer);
 
     // Initialize the camera view with the entire screen area
     camera = {0, 0, windowWidth, windowHeight};
@@ -89,27 +95,27 @@ void Game::ProcessInput() {
     SDL_Event sdlEvent;
     while (SDL_PollEvent(&sdlEvent)) {
         // ImGui SDL input
-        ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+        ImGui_ImplSDL3_ProcessEvent(&sdlEvent);
         ImGuiIO& io = ImGui::GetIO();
-        int mouseX, mouseY;
+        float mouseX, mouseY;
         const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
         io.MousePos = ImVec2(mouseX, mouseY);
-        io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
-        io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
+        io.MouseDown[0] = buttons & SDL_BUTTON_MASK(SDL_BUTTON_LEFT);
+        io.MouseDown[1] = buttons & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT);
 
         // Handle core SDL events (close window, key pressed, etc.)
         switch (sdlEvent.type) {
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
                 isRunning = false;
                 break;
-            case SDL_KEYDOWN:
-                if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
+            case SDL_EVENT_KEY_DOWN:
+                if (sdlEvent.key.key == SDLK_ESCAPE) {
                     isRunning = false;
                 }
-                if (sdlEvent.key.keysym.sym == SDLK_F1) {
+                if (sdlEvent.key.key == SDLK_F1) {
                     isDebug = !isDebug;
                 }
-                eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
+                eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.key);
                 break;
         }
     }
@@ -196,8 +202,8 @@ void Game::Run() {
 }
 
 void Game::Destroy() {
-    ImGuiSDL::Deinitialize();
-    ImGui::DestroyContext();
+    ImGui_ImplSDLRenderer3_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

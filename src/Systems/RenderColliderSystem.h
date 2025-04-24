@@ -30,14 +30,14 @@ class RenderColliderSystem: public System {
                     continue;
                 }
 
-                SDL_Rect colliderRect = {
-                    static_cast<int>(transform.position.x + collider.offset.x - camera.x),
-                    static_cast<int>(transform.position.y + collider.offset.y - camera.y),
-                    static_cast<int>(collider.width * transform.scale.x),
-                    static_cast<int>(collider.height * transform.scale.y)
+                SDL_FRect colliderRect = {
+                    transform.position.x + collider.offset.x - camera.x,
+                    transform.position.y + collider.offset.y - camera.y,
+                    collider.width * transform.scale.x,
+                    collider.height * transform.scale.y
                 };
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                SDL_RenderDrawRect(renderer, &colliderRect);
+                SDL_RenderRect(renderer, &colliderRect);
             }
         }
 };

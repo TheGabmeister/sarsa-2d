@@ -8,6 +8,7 @@
 #include <deque>
 #include <unordered_map>
 #include <typeindex>
+#include <memory>
 
 const unsigned int MAX_COMPONENTS = 32;
 

@@ -8,8 +8,9 @@
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
 #include "../Components/HealthComponent.h"
-#include <imgui/imgui.h>
-#include <imgui/imgui_sdl.h>
+#include <imgui.h>
+#include <backends/imgui_impl_sdl3.h>
+#include <backends/imgui_impl_sdlrenderer3.h>
 
 class RenderGUISystem: public System {
     public:
@@ -114,7 +115,8 @@ class RenderGUISystem: public System {
             ImGui::End();
 
             ImGui::Render();
-            ImGuiSDL::Render(ImGui::GetDrawData());
+            //ImGuiSDL::Render(ImGui::GetDrawData());
+            
         }
 };
 

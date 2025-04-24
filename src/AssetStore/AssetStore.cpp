@@ -1,6 +1,6 @@
 #include "./AssetStore.h"
 #include "../Logger/Logger.h"
-#include <SDL2/SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 
 AssetStore::AssetStore() {
     Logger::Log("AssetStore constructor called!");
@@ -26,7 +26,7 @@ void AssetStore::ClearAssets() {
 void AssetStore::AddTexture(SDL_Renderer* renderer, const std::string& assetId, const std::string& filePath) {
     SDL_Surface* surface = IMG_Load(filePath.c_str());
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
+    SDL_DestroySurface(surface);
 
     // Add the texture to the map
     textures.emplace(assetId, texture);

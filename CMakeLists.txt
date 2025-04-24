@@ -52,6 +52,8 @@ set(LUA_PATH  "thirdparty/lua")
 file(GLOB LUA_SOURCES ${LUA_PATH}/*.c) 
 add_library(lua STATIC ${LUA_SOURCES})
 
+add_subdirectory(thirdparty/sol2 EXCLUDE_FROM_ALL)
+
 ##############################################################################
 
 # Automatically add all .cpp and .h
@@ -81,13 +83,18 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3
 	SDL3_image::SDL3_image
+	SDL3_mixer::SDL3_mixer
+	SDL3_ttf::SDL3_ttf
 	glm::glm-header-only
-	lua
-	imgui
+	lua::lua
+	imgui::imgui
+	sol2::sol2
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/"
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/lua"
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui"
 )
 
 #target_include_directories(imgui PUBLIC ${IMGUI_PATH})

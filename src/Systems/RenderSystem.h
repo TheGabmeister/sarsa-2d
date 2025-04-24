@@ -53,18 +53,18 @@ class RenderSystem: public System {
                 const auto sprite = entity.spriteComponent;
 
                 // Set the source rectangle of our original sprite texture
-                SDL_Rect srcRect = sprite.srcRect;
+                SDL_FRect srcRect = sprite.srcRect;
 
                 // Set the destination rectangle with the x,y position to be rendered
-                SDL_Rect dstRect = {
-                    static_cast<int>(transform.position.x - (sprite.isFixed ? 0 : camera.x)),
-                    static_cast<int>(transform.position.y - (sprite.isFixed ? 0 : camera.y)),
-                    static_cast<int>(sprite.width * transform.scale.x),
-                    static_cast<int>(sprite.height * transform.scale.y)
+                SDL_FRect dstRect = {
+                    transform.position.x - (sprite.isFixed ? 0 : camera.x),
+                    transform.position.y - (sprite.isFixed ? 0 : camera.y),
+                    sprite.width * transform.scale.x,
+                    sprite.height * transform.scale.y
                 };
 
                 // Draw the texture on the destination renderer
-                SDL_RenderCopyEx(
+                SDL_RenderTextureRotated(
                     renderer,
                     assetStore->GetTexture(sprite.assetId),
                     &srcRect,

@@ -19,24 +19,25 @@ class RenderTextSystem: public System {
                 SDL_Surface* surface = TTF_RenderText_Blended(
                     assetStore->GetFont(textlabel.assetId),
                     textlabel.text.c_str(),
+                    0,
                     textlabel.color
                 );
                 SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-                SDL_FreeSurface(surface);
+                SDL_DestroySurface(surface);
 
-                int labelWidth = 0;
-                int labelHeight = 0;
+                float labelWidth = 0;
+                float labelHeight = 0;
 
-                SDL_QueryTexture(texture, NULL, NULL, &labelWidth, &labelHeight);
+                SDL_GetTextureSize(texture, &labelWidth, &labelHeight);
 
-                SDL_Rect dstRect = {
-                    static_cast<int>(textlabel.position.x - (textlabel.isFixed ? 0 : camera.x)),
-                    static_cast<int>(textlabel.position.y - (textlabel.isFixed ? 0 : camera.y)),
+                SDL_FRect dstRect = {
+                    textlabel.position.x - (textlabel.isFixed ? 0 : camera.x),
+                    textlabel.position.y - (textlabel.isFixed ? 0 : camera.y),
                     labelWidth,
                     labelHeight
                 };
 
-                SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                SDL_RenderTexture(renderer, texture, NULL, &dstRect);
 
                 SDL_DestroyTexture(texture);
             }

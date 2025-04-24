@@ -9,11 +9,11 @@ struct SpriteComponent {
     int width;
     int height;
     int zIndex;
-    SDL_RendererFlip flip;
+    SDL_FlipMode flip;
     bool isFixed;
-    SDL_Rect srcRect;
+    SDL_FRect srcRect;
     
-    SpriteComponent(std::string assetId = "", int width = 0, int height = 0, int zIndex = 0, bool isFixed = false, int srcRectX = 0, int srcRectY = 0) {
+    SpriteComponent(std::string assetId = "", float width = 0, float height = 0, int zIndex = 0, bool isFixed = false, float srcRectX = 0, float srcRectY = 0) {
         this->assetId = assetId;
         this->width = width;
         this->height = height;
