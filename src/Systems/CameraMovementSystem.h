@@ -4,7 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/CameraFollowComponent.h"
 #include "../Components/TransformComponent.h"
-#include <SDL3/SDL.h>
+#include <SDL2/SDL.h>
 
 class CameraMovementSystem: public System {
     public:
@@ -13,7 +13,7 @@ class CameraMovementSystem: public System {
             RequireComponent<TransformComponent>();
         }
 
-        void Update(SDL_FRect& camera) {
+        void Update(SDL_Rect& camera) {
             for (auto entity: GetSystemEntities()) {
                 auto transform = entity.GetComponent<TransformComponent>();
 
@@ -28,8 +28,8 @@ class CameraMovementSystem: public System {
                 // Keep camera rectangle view inside the screen limits
                 camera.x = camera.x < 0 ? 0 : camera.x;
                 camera.y = camera.y < 0 ? 0 : camera.y;
-                camera.x = (camera.x + camera.w > Game::mapWidth) ? Game::mapWidth - camera.w : camera.x;
-                camera.y = (camera.y + camera.h > Game::mapHeight) ? Game::mapHeight - camera.h : camera.y;
+                camera.x = camera.x > camera.w ? camera.w : camera.x;
+                camera.y = camera.y > camera.h ? camera.h : camera.y;
             }
         }
 };

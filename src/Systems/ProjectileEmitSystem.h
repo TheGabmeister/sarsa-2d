@@ -2,13 +2,16 @@
 #define PROJECTILEEMITSYSTEM_H
 
 #include "../ECS/ECS.h"
+#include "../EventBus/EventBus.h"
+#include "../Events/KeyPressedEvent.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/ProjectileComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
-#include <SDL3/SDL.h>
+#include "../Components/CameraFollowComponent.h"
+#include <SDL2/SDL.h>
 
 class ProjectileEmitSystem: public System {
     public:
@@ -23,8 +26,8 @@ class ProjectileEmitSystem: public System {
 
         void OnKeyPressed(KeyPressedEvent& event) {
             if (event.symbol == SDLK_SPACE) {
-                for (auto entity : GetSystemEntities()) {
-                    if (entity.HasComponent<CameraFollowComponent>()) {
+                for (auto entity: GetSystemEntities()) {
+                    if (entity.HasTag("player")) {
                         const auto projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
                         const auto transform = entity.GetComponent<TransformComponent>();
                         const auto rigidbody = entity.GetComponent<RigidBodyComponent>();
@@ -47,20 +50,20 @@ class ProjectileEmitSystem: public System {
                         if (rigidbody.velocity.y < 0) directionY = -1;
                         projectileVelocity.x = projectileEmitter.projectileVelocity.x * directionX;
                         projectileVelocity.y = projectileEmitter.projectileVelocity.y * directionY;
-
+                    
                         // Create new projectile entity and add it to the world
                         Entity projectile = entity.registry->CreateEntity();
                         projectile.Group("projectiles");
                         projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
                         projectile.AddComponent<RigidBodyComponent>(projectileVelocity);
-                        projectile.AddComponent<SpriteComponent>("ball-texture", 32, 32, 4);
-                        projectile.AddComponent<BoxColliderComponent>(32, 32);
+                        projectile.AddComponent<SpriteComponent>("bullet-texture", 4, 4, 4);
+                        projectile.AddComponent<BoxColliderComponent>(4, 4);
                         projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly, projectileEmitter.hitPercentDamage, projectileEmitter.projectileDuration);
                     }
                 }
             }
         }
-
+        
         void Update(std::unique_ptr<Registry>& registry) {
             for (auto entity: GetSystemEntities()) {
                 auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
@@ -85,13 +88,9 @@ class ProjectileEmitSystem: public System {
                     projectile.Group("projectiles");
                     projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(1.0, 1.0), 0.0);
                     projectile.AddComponent<RigidBodyComponent>(projectileEmitter.projectileVelocity);
-                    projectile.AddComponent<SpriteComponent>("ball-texture", 32, 32, 4);
-                    projectile.AddComponent<BoxColliderComponent>(32, 32);
-                    projectile.AddComponent<ProjectileComponent>(
-                        projectileEmitter.isFriendly, 
-                        projectileEmitter.hitPercentDamage,
-                        projectileEmitter.projectileDuration 
-                    );
+                    projectile.AddComponent<SpriteComponent>("bullet-texture", 4, 4, 4);
+                    projectile.AddComponent<BoxColliderComponent>(4, 4);
+                    projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly, projectileEmitter.hitPercentDamage, projectileEmitter.projectileDuration);
                 
                     // Update the projectile emitter component last emission to the current milliseconds
                     projectileEmitter.lastEmissionTime = SDL_GetTicks();

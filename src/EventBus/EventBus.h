@@ -1,11 +1,10 @@
 #ifndef EVENTBUS_H
 #define EVENTBUS_H
 
-#include <spdlog/spdlog.h>
+#include "../Logger/Logger.h"
 #include "Event.h"
 #include <map>
 #include <typeindex>
-#include <functional>
 #include <list>
 
 class IEventCallback {
@@ -49,11 +48,11 @@ class EventBus {
 
     public:
         EventBus() {
-            spdlog::info("EventBus constructor called!");
+            Logger::Log("EventBus constructor called!");
         }
         
         ~EventBus() {
-            spdlog::info("EventBus destructor called!");
+            Logger::Log("EventBus destructor called!");
         }
 
         // Clears the subscribers list

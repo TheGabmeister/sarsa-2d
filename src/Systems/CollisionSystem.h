@@ -34,7 +34,7 @@ class CollisionSystem: public System {
 
                     auto bTransform = b.GetComponent<TransformComponent>();
                     auto bCollider = b.GetComponent<BoxColliderComponent>();
-
+                 
                     // Perform the AABB collision check between entities a and b
                     bool collisionHappened = CheckAABBCollision(
                         aTransform.position.x + aCollider.offset.x,
@@ -48,9 +48,7 @@ class CollisionSystem: public System {
                     );
 
                     if (collisionHappened) {
-                        spdlog::info("Entity {} is colliding with entity {}", std::to_string(a.GetId()), std::to_string(b.GetId()));
-
-						eventBus->EmitEvent<CollisionEvent>(a, b);
+                        eventBus->EmitEvent<CollisionEvent>(a, b);
                     }
                 }
             }
@@ -62,9 +60,8 @@ class CollisionSystem: public System {
                 aX + aW > bX &&
                 aY < bY + bH &&
                 aY + aH > bY
-                );
+            );
         }
-
 };
 
 #endif

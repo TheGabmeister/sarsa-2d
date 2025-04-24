@@ -1,14 +1,13 @@
 #ifndef ECS_H
 #define ECS_H
 
-#include <spdlog/spdlog.h>
+#include "../Logger/Logger.h"
 #include <vector>
 #include <bitset>
 #include <set>
 #include <deque>
 #include <unordered_map>
 #include <typeindex>
-#include <memory>
 
 const unsigned int MAX_COMPONENTS = 32;
 
@@ -45,23 +44,27 @@ class Entity {
         Entity(const Entity& entity) = default;
         void Kill();
         int GetId() const;
-       
-        // Manage entity tags and groups
-        void Tag(const std::string& tag);
-        bool HasTag(const std::string& tag) const;
-        void Group(const std::string& group);
-        bool BelongsToGroup(const std::string& group) const;
 
+        // Manage entity tags and groups
+		void Tag(const std::string& tag);
+    	bool HasTag(const std::string& tag) const;
+    	void Group(const std::string& group);
+    	bool BelongsToGroup(const std::string& group) const;
+       
+        // Manage entity components
+        template <typename TComponent, typename ...TArgs> void AddComponent(TArgs&& ...args);
+        template <typename TComponent> void RemoveComponent();
+        template <typename TComponent> bool HasComponent() const;
+        template <typename TComponent> TComponent& GetComponent() const;
+
+        // Operator overloading for entity objects
         Entity& operator =(const Entity& other) = default;
         bool operator ==(const Entity& other) const { return id == other.id; }
         bool operator !=(const Entity& other) const { return id != other.id; }
         bool operator >(const Entity& other) const { return id > other.id; }
         bool operator <(const Entity& other) const { return id < other.id; }
 
-        template <typename TComponent, typename ...TArgs> void AddComponent(TArgs&& ...args);
-        template <typename TComponent> void RemoveComponent();
-        template <typename TComponent> bool HasComponent() const;
-        template <typename TComponent> TComponent& GetComponent() const;
+        // Hold a pointer to the entity's owner registry
         class Registry* registry;
 };
 
@@ -93,98 +96,96 @@ class System {
 ////////////////////////////////////////////////////////////////////////////////
 // A pool is just a vector (contiguous data) of objects of type T
 ////////////////////////////////////////////////////////////////////////////////
-class IPool 
-{
+class IPool {
     public:
-        virtual ~IPool() = default;
+        virtual ~IPool() = default; 
         virtual void RemoveEntityFromPool(int entityId) = 0;
 };
 
 template <typename T>
-class Pool : public IPool {
-private:
-    // We keep track of the vector of objects and the current number of elements
-    std::vector<T> data;
-    int size;
+class Pool: public IPool {
+    private:
+        // We keep track of the vector of objects and the current number of elements
+        std::vector<T> data;
+        int size;
 
-    // Helper maps to keep track of entity ids per index, so the vector is always packed
-    std::unordered_map<int, int> entityIdToIndex;
-    std::unordered_map<int, int> indexToEntityId;
+        // Helper maps to keep track of entity ids per index, so the vector is always packed
+        std::unordered_map<int, int> entityIdToIndex;
+        std::unordered_map<int, int> indexToEntityId;
 
-public:
-    Pool(int capacity = 100) {
-        size = 0;
-        data.resize(capacity);
-    }
-
-    virtual ~Pool() = default;
-
-    bool IsEmpty() const {
-        return size == 0;
-    }
-
-    int GetSize() const {
-        return size;
-    }
-
-    void Clear() {
-        data.clear();
-        entityIdToIndex.clear();
-        indexToEntityId.clear();
-        size = 0;
-    }
-
-    void Set(int entityId, T object) {
-        if (entityIdToIndex.find(entityId) != entityIdToIndex.end()) {
-            // If the element already exists, simply replace the component object
-            int index = entityIdToIndex[entityId];
-            data[index] = object;
+    public:
+        Pool(int capacity = 100) {
+            size = 0;
+            data.resize(capacity);
         }
-        else {
-            // When adding a new object, we keep track of the entity ids and their vector index
-            int index = size;
-            entityIdToIndex.emplace(entityId, index);
-            indexToEntityId.emplace(index, entityId);
-            if (index >= data.capacity()) {
-                // If necessary, we resize by always doubling the current capacity
-                data.resize(size * 2);
+
+        virtual ~Pool() = default;
+
+        bool IsEmpty() const {
+            return size == 0;
+        }
+
+        int GetSize() const {
+            return size;
+        }
+
+        void Clear() {
+            data.clear();
+            entityIdToIndex.clear();
+            indexToEntityId.clear();
+            size = 0;
+        }
+
+        void Set(int entityId, T object) {
+            if (entityIdToIndex.find(entityId) != entityIdToIndex.end()) {
+                // If the element already exists, simply replace the component object
+                int index = entityIdToIndex[entityId];
+                data[index] = object;
+            } else {
+                // When adding a new object, we keep track of the entity ids and their vector index
+                int index = size;
+                entityIdToIndex.emplace(entityId, index);
+                indexToEntityId.emplace(index, entityId);
+                if (index >= data.capacity()) {
+                    // If necessary, we resize by always doubling the current capacity
+                    data.resize(size * 2);
+                }
+                data[index] = object;
+                size++;
             }
-            data[index] = object;
-            size++;
         }
-    }
 
-    void Remove(int entityId) {
-        // Copy the last element to the deleted position to keep the array packed
-        int indexOfRemoved = entityIdToIndex[entityId];
-        int indexOfLast = size - 1;
-        data[indexOfRemoved] = data[indexOfLast];
+        void Remove(int entityId) {
+            // Copy the last element to the deleted position to keep the array packed
+		    int indexOfRemoved = entityIdToIndex[entityId];
+		    int indexOfLast = size - 1;
+		    data[indexOfRemoved] = data[indexOfLast];
 
-        // Update the index-entity maps to point to the correct elements
-        int entityIdOfLastElement = indexToEntityId[indexOfLast];
-        entityIdToIndex[entityIdOfLastElement] = indexOfRemoved;
-        indexToEntityId[indexOfRemoved] = entityIdOfLastElement;
+            // Update the index-entity maps to point to the correct elements
+            int entityIdOfLastElement = indexToEntityId[indexOfLast];
+            entityIdToIndex[entityIdOfLastElement] = indexOfRemoved;
+            indexToEntityId[indexOfRemoved] = entityIdOfLastElement;
 
-        entityIdToIndex.erase(entityId);
-        indexToEntityId.erase(indexOfLast);
+            entityIdToIndex.erase(entityId);
+            indexToEntityId.erase(indexOfLast);
 
-        size--;
-    }
-
-    void RemoveEntityFromPool(int entityId) override {
-        if (entityIdToIndex.find(entityId) != entityIdToIndex.end()) {
-            Remove(entityId);
+            size--;
         }
-    }
 
-    T& Get(int entityId) {
-        int index = entityIdToIndex[entityId];
-        return static_cast<T&>(data[index]);
-    }
+        void RemoveEntityFromPool(int entityId) override {
+            if (entityIdToIndex.find(entityId) != entityIdToIndex.end()) {
+                Remove(entityId);
+            }
+        }
 
-    T& operator [](unsigned int index) {
-        return data[index];
-    }
+        T& Get(int entityId) {
+            int index = entityIdToIndex[entityId];
+            return static_cast<T&>(data[index]);
+        }
+
+        T& operator [](unsigned int index) {
+            return data[index];
+        }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -215,11 +216,11 @@ class Registry {
         std::set<Entity> entitiesToBeKilled;
 
         // Entity tags (one tag name per entity)
-        std::unordered_map<std::string, Entity> entityPerTag;
+		std::unordered_map<std::string, Entity> entityPerTag;
         std::unordered_map<int, std::string> tagPerEntity;
 
-        // Entity groups (a set of entities per group name)
-        std::unordered_map<std::string, std::set<Entity>> entitiesPerGroup;
+		// Entity groups (a set of entities per group name)
+		std::unordered_map<std::string, std::set<Entity>> entitiesPerGroup;
         std::unordered_map<int, std::string> groupPerEntity;
 
         // List of free entity ids that were previously removed
@@ -227,11 +228,11 @@ class Registry {
 
     public:
         Registry() {
-            spdlog::info("Registry constructor called");
+            Logger::Log("Registry constructor called!");
         }
         
         ~Registry() {
-            spdlog::info("Registry destructor called");
+            Logger::Log("Registry destructor called!");
         }
 
         // The registry Update() finally processes the entities that are waiting to be added/killed to the systems
@@ -242,16 +243,16 @@ class Registry {
         void KillEntity(Entity entity);
 
         // Tag management
-        void TagEntity(Entity entity, const std::string& tag);
-        bool EntityHasTag(Entity entity, const std::string& tag) const;
-        Entity GetEntityByTag(const std::string& tag) const;
-        void RemoveEntityTag(Entity entity);
+		void TagEntity(Entity entity, const std::string& tag);
+		bool EntityHasTag(Entity entity, const std::string& tag) const;
+		Entity GetEntityByTag(const std::string& tag) const;
+		void RemoveEntityTag(Entity entity);
 
         // Group management
-        void GroupEntity(Entity entity, const std::string& group);
-        bool EntityBelongsToGroup(Entity entity, const std::string& group) const;
-        std::vector<Entity> GetEntitiesByGroup(const std::string& group) const;
-        void RemoveEntityGroup(Entity entity);
+		void GroupEntity(Entity entity, const std::string& group);
+		bool EntityBelongsToGroup(Entity entity, const std::string& group) const;
+		std::vector<Entity> GetEntitiesByGroup(const std::string& group) const;
+		void RemoveEntityGroup(Entity entity);
 
         // Component management
         template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
@@ -321,16 +322,22 @@ void Registry::AddComponent(Entity entity, TArgs&& ...args) {
 
     entityComponentSignatures[entityId].set(componentId);
 
-    spdlog::info("Component id = {} was added to entity id {}", std::to_string(componentId) ,std::to_string(entityId));
+    Logger::Log("Component id = " + std::to_string(componentId) + " was added to entity id " + std::to_string(entityId));
 }
 
 template <typename TComponent>
 void Registry::RemoveComponent(Entity entity) {
 	const auto componentId = Component<TComponent>::GetId();
 	const auto entityId = entity.GetId();
-	entityComponentSignatures[entityId].set(componentId, false);
+    
+    // Remove the component from the component list for that entity
+    std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
+    componentPool->Remove(entityId);
 
-    spdlog::info("Component id = {} was removed from entity id {}", std::to_string(componentId), std::to_string(entityId));
+    // Set this component signature for that entity to false
+	entityComponentSignatures[entityId].set(componentId, false);
+    
+    Logger::Log("Component id = " + std::to_string(componentId) + " was removed from entity id " + std::to_string(entityId));
 }
 
 template <typename TComponent>
@@ -342,8 +349,8 @@ bool Registry::HasComponent(Entity entity) const {
 
 template <typename TComponent>
 TComponent& Registry::GetComponent(Entity entity) const {
-    const auto componentId = Component<TComponent>::GetId();
-    const auto entityId = entity.GetId();
+	const auto componentId = Component<TComponent>::GetId();
+	const auto entityId = entity.GetId();
     auto componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
     return componentPool->Get(entityId);
 }
@@ -355,16 +362,17 @@ void Entity::AddComponent(TArgs&& ...args) {
 
 template <typename TComponent>
 void Entity::RemoveComponent() {
-	registry->RemoveComponent<TComponent>(*this); 
+    registry->RemoveComponent<TComponent>(*this);
 }
 
 template <typename TComponent>
 bool Entity::HasComponent() const {
-	return registry->HasComponent<TComponent>(*this);
+    return registry->HasComponent<TComponent>(*this);
 }
 
 template <typename TComponent>
 TComponent& Entity::GetComponent() const {
     return registry->GetComponent<TComponent>(*this);
 }
+
 #endif

@@ -1,7 +1,7 @@
 #ifndef PROJECTILECOMPONENT_H
 #define PROJECTILECOMPONENT_H
 
-#include <SDL3/SDL.h>
+#include <SDL2/SDL.h>
 
 struct ProjectileComponent {
     bool isFriendly;

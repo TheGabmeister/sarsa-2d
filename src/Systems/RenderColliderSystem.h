@@ -4,7 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/BoxColliderComponent.h"
-#include <SDL3/SDL.h>
+#include <SDL2/SDL.h>
 
 class RenderColliderSystem: public System {
     public:
@@ -13,19 +13,31 @@ class RenderColliderSystem: public System {
             RequireComponent<BoxColliderComponent>();
         }
 
-        void Update(SDL_Renderer* renderer, SDL_FRect& camera) {
+        void Update(SDL_Renderer* renderer, const SDL_Rect& camera) {
             for (auto entity: GetSystemEntities()) {
                 const auto transform = entity.GetComponent<TransformComponent>();
                 const auto collider = entity.GetComponent<BoxColliderComponent>();
 
-                SDL_FRect colliderRect = {
-                    transform.position.x + collider.offset.x - camera.x,
-                    transform.position.y + collider.offset.y - camera.y,
-                    collider.width,
-                    collider.height
+                // Bypass rendering if entities are outside the camera view
+                bool isOutsideCameraView = (
+                    transform.position.x + (transform.scale.x * collider.width) < camera.x ||
+                    transform.position.x > camera.x + camera.w ||
+                    transform.position.y + (transform.scale.y * collider.height) < camera.y ||
+                    transform.position.y > camera.y + camera.h
+                );
+
+                if (isOutsideCameraView) {
+                    continue;
+                }
+
+                SDL_Rect colliderRect = {
+                    static_cast<int>(transform.position.x + collider.offset.x - camera.x),
+                    static_cast<int>(transform.position.y + collider.offset.y - camera.y),
+                    static_cast<int>(collider.width * transform.scale.x),
+                    static_cast<int>(collider.height * transform.scale.y)
                 };
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                SDL_RenderRect(renderer, &colliderRect);
+                SDL_RenderDrawRect(renderer, &colliderRect);
             }
         }
 };

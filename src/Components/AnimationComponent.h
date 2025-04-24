@@ -1,7 +1,7 @@
 #ifndef ANIMATIONCOMPONENT_H
 #define ANIMATIONCOMPONENT_H
 
-#include <SDL3/SDL.h>
+#include <SDL2/SDL.h>
 
 struct AnimationComponent {
     int numFrames;

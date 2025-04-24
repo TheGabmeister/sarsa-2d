@@ -4,7 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/AnimationComponent.h"
-#include <SDL3/SDL.h>
+#include <SDL2/SDL.h>
 
 class AnimationSystem: public System {
     public:
