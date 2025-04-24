@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-project ("sarsa-2d")
+project ("pikuma-engine")
 
 # imgui and sol requires modern c++
 set(CMAKE_CXX_STANDARD 17)
@@ -39,6 +39,12 @@ add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
 add_subdirectory(thirdparty/glm EXCLUDE_FROM_ALL)
 
+set(IMGUI_PATH  "thirdparty/imgui")
+file(GLOB IMGUI_SOURCES ${IMGUI_PATH}/*.cpp) 
+add_library(imgui STATIC ${IMGUI_SOURCES})
+
+add_subdirectory(thirdparty/lua)
+
 ##############################################################################
 
 # Automatically add all .cpp and .h
@@ -69,8 +75,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3::SDL3
 	SDL3_image::SDL3_image
 	glm::glm-header-only
+	lua
 )
+target_link_libraries(${PROJECT_NAME} PUBLIC imgui)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/"
 )
+
+#target_include_directories(imgui PUBLIC ${IMGUI_PATH})
