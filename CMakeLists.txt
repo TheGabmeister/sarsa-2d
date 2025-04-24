@@ -37,9 +37,7 @@ set(SDLIMAGE_XPM OFF CACHE BOOL "Support loading XPM images" FORCE)
 set(SDLIMAGE_XV OFF CACHE BOOL "Support loading XV images" FORCE)
 add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
 
-add_subdirectory(thirdparty/spdlog EXCLUDE_FROM_ALL)
 add_subdirectory(thirdparty/glm EXCLUDE_FROM_ALL)
-add_subdirectory(thirdparty/EnTT EXCLUDE_FROM_ALL)
 
 ##############################################################################
 
@@ -70,9 +68,7 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3
 	SDL3_image::SDL3_image
-	spdlog::spdlog_header_only
 	glm::glm-header-only
-	EnTT::EnTT
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
