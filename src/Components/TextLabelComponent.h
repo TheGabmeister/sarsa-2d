@@ -3,7 +3,7 @@
 
 #include <string>
 #include <glm/glm.hpp>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 struct TextLabelComponent {
     glm::vec2 position;

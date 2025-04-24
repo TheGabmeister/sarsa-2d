@@ -16,9 +16,9 @@
 #include "../Systems/RenderHealthBarSystem.h"
 #include "../Systems/RenderGUISystem.h"
 #include "../Systems/ScriptSystem.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_image.h>
+#include <SDL3/SDL_ttf.h>
 #include <glm/glm.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_sdl.h>

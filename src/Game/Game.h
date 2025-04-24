@@ -4,7 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../AssetStore/AssetStore.h"
 #include "../EventBus/EventBus.h"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <sol/sol.hpp>
 
 const int FPS = 60;

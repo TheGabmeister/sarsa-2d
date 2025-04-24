@@ -1,7 +1,7 @@
 #ifndef PROJECTILEEMITTERCOMPONENT_H
 #define PROJECTILEEMITTERCOMPONENT_H
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 
 struct ProjectileEmitterComponent {

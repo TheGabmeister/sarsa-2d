@@ -4,7 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/BoxColliderComponent.h"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 class RenderColliderSystem: public System {
     public:

@@ -4,7 +4,7 @@
 #include "../AssetStore/AssetStore.h"
 #include "../ECS/ECS.h"
 #include "../Components/TextLabelComponent.h"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 class RenderTextSystem: public System {
     public:

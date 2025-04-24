@@ -11,7 +11,7 @@
 #include "../Components/ProjectileComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
 #include "../Components/CameraFollowComponent.h"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 class ProjectileEmitSystem: public System {
     public:

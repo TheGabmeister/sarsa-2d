@@ -6,7 +6,7 @@
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/HealthComponent.h"
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 class RenderHealthBarSystem: public System {
     public:
