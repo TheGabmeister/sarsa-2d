@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #! ! ! ! ! ! !
 set(PRODUCTION_BUILD OFF CACHE BOOL "Make this a production build" FORCE)
 #delete the out folder after changing if visual studio doesn recognize the change!
-
+ 
 # set the output directory for built objects.
 # This makes sure that the dynamic library goes into the build directory automatically.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
@@ -21,9 +21,19 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(SDL2_LIBRARY "E:/Personal_Projects/2025/Game Engine 2D/pikuma-2d-engine/build/Debug/SDL3.dll")  # Or SDL2.lib on Windows
 set(SDL2_INCLUDE_DIR "E:/Personal_Projects/2025/Game Engine 2D/pikuma-2d-engine/thirdparty/SDL/include/SDL3") 
 
-add_subdirectory(thirdparty/SDL EXCLUDE_FROM_ALL) 
-add_subdirectory(thirdparty/SDL_mixer EXCLUDE_FROM_ALL) 
-add_subdirectory(thirdparty/SDL_ttf EXCLUDE_FROM_ALL) 
+add_subdirectory(thirdparty/SDL ) 
+
+set(SDL2MIXER_FLAC OFF CACHE BOOL "Enable FLAC music" FORCE)
+set(SDL2MIXER_GME OFF CACHE BOOL "Enable GME music" FORCE)
+set(SDL2MIXER_MOD OFF CACHE BOOL "Enable MOD music" FORCE)
+set(SDL2MIXER_MP3 OFF CACHE BOOL "Enable MP3 music" FORCE)
+set(SDL2MIXER_MIDI OFF CACHE BOOL "Enable MIDI music" FORCE)
+set(SDL2MIXER_OPUS OFF CACHE BOOL "Enable OPUS music" FORCE)
+set(SDL2MIXER_VORBIS OFF CACHE BOOL "Enable VORBIS music" FORCE)
+set(SDL2MIXER_WAVPACK OFF CACHE BOOL "Enable WAVPACK music" FORCE)
+add_subdirectory(thirdparty/SDL_mixer) 
+
+add_subdirectory(thirdparty/SDL_ttf ) 
 
 # Turn off unsupported image types. Only allow BMP, JPG, and PNG
 set(SDLIMAGE_AVIF OFF CACHE BOOL "Support loading AVIF images" FORCE)
@@ -40,9 +50,9 @@ set(SDLIMAGE_WEBP OFF CACHE BOOL "Support loading WEBP images" FORCE)
 set(SDLIMAGE_XCF OFF CACHE BOOL "Support loading XCF images" FORCE)
 set(SDLIMAGE_XPM OFF CACHE BOOL "Support loading XPM images" FORCE)
 set(SDLIMAGE_XV OFF CACHE BOOL "Support loading XV images" FORCE)
-add_subdirectory(thirdparty/SDL_image EXCLUDE_FROM_ALL)
+add_subdirectory(thirdparty/SDL_image )
 
-add_subdirectory(thirdparty/glm EXCLUDE_FROM_ALL)
+add_subdirectory(thirdparty/glm )
 
 set(IMGUI_PATH  "thirdparty/imgui")
 file(GLOB IMGUI_SOURCES ${IMGUI_PATH}/*.cpp) 
@@ -52,7 +62,7 @@ set(LUA_PATH  "thirdparty/lua")
 file(GLOB LUA_SOURCES ${LUA_PATH}/*.c) 
 add_library(lua STATIC ${LUA_SOURCES})
 
-add_subdirectory(thirdparty/sol2 EXCLUDE_FROM_ALL)
+add_subdirectory(thirdparty/sol2 )
 
 ##############################################################################
 
@@ -83,11 +93,11 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3
 	SDL3_image::SDL3_image
-	SDL3_mixer::SDL3_mixer
+	SDL2_mixer::SDL2_mixer
 	SDL3_ttf::SDL3_ttf
 	glm::glm-header-only
-	lua::lua
-	imgui::imgui
+	lua 
+	imgui 
 	sol2::sol2
 )
 
@@ -96,5 +106,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/lua"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui"
 )
-
+target_include_directories(SDL2_mixer PRIVATE
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include"
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL_mixer/Xcode/iOS/SDL2.framework/Headers"
+	#E:\Personal_Projects\2025\Game Engine 2D\pikuma-2d-engine\thirdparty\SDL_mixer\Xcode\iOS\SDL2.framework\Headers\SDL_rwops.h
+)
 #target_include_directories(imgui PUBLIC ${IMGUI_PATH})
