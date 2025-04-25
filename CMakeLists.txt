@@ -55,11 +55,16 @@ add_subdirectory(thirdparty/SDL_image )
 add_subdirectory(thirdparty/glm )
 
 set(IMGUI_PATH  "thirdparty/imgui")
-file(GLOB IMGUI_SOURCES ${IMGUI_PATH}/*.cpp) 
+file(GLOB IMGUI_SOURCES 
+	${IMGUI_PATH}/*.cpp
+    ${IMGUI_PATH}/backends/imgui_impl_sdl3.cpp
+    ${IMGUI_PATH}/backends/imgui_impl_sdlrenderer3.cpp
+)
 add_library(imgui STATIC ${IMGUI_SOURCES})
 
 set(LUA_PATH  "thirdparty/lua")
 file(GLOB LUA_SOURCES ${LUA_PATH}/*.c) 
+list(REMOVE_ITEM LUA_SOURCES ${LUA_PATH}/lua.c)
 add_library(lua STATIC ${LUA_SOURCES})
 
 add_subdirectory(thirdparty/sol2 )
@@ -93,10 +98,10 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3
 	SDL3_image::SDL3_image
-	SDL2_mixer::SDL2_mixer
+	#SDL3_mixer::SDL3_mixer
 	SDL3_ttf::SDL3_ttf
 	glm::glm-header-only
-	lua 
+	lua
 	imgui 
 	sol2::sol2
 )
@@ -106,9 +111,13 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/lua"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui"
 )
-target_include_directories(SDL2_mixer PRIVATE
-	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include"
-	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL_mixer/Xcode/iOS/SDL2.framework/Headers"
+#target_include_directories(SDL3_mixer PRIVATE
+#	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include"
+#	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL_mixer/Xcode/iOS/SDL2.framework/Headers"
 	#E:\Personal_Projects\2025\Game Engine 2D\pikuma-2d-engine\thirdparty\SDL_mixer\Xcode\iOS\SDL2.framework\Headers\SDL_rwops.h
+#)
+target_include_directories(imgui PUBLIC 
+	${IMGUI_PATH}
+	${IMGUI_PATH}/backends
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include"
 )
-#target_include_directories(imgui PUBLIC ${IMGUI_PATH})
