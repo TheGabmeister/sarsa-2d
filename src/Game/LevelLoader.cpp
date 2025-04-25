@@ -25,7 +25,7 @@ LevelLoader::~LevelLoader() {
 
 void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& registry, const std::unique_ptr<AssetStore>& assetStore, SDL_Renderer* renderer, int levelNumber) {
     // This checks the syntax of our script, but it does not execute the script
-    sol::load_result script = lua.load_file("./assets/scripts/Level" + std::to_string(levelNumber) + ".lua");
+    sol::load_result script = lua.load_file(RESOURCES_PATH"scripts/Level" + std::to_string(levelNumber) + ".lua");
     if (!script.valid()) {
         sol::error err = script;
         std::string errorMessage = err.what();
@@ -34,7 +34,7 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
     }
 
     // Executes the script using the Sol state
-    lua.script_file("./assets/scripts/Level" + std::to_string(levelNumber) + ".lua");
+    lua.script_file(RESOURCES_PATH"scripts/Level" + std::to_string(levelNumber) + ".lua");
 
     // Read the big table for the current level
     sol::table level = lua["Level"];

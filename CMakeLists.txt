@@ -62,9 +62,8 @@ file(GLOB IMGUI_SOURCES
 )
 add_library(imgui STATIC ${IMGUI_SOURCES})
 
-set(LUA_PATH  "thirdparty/lua")
+set(LUA_PATH "thirdparty/lua")
 file(GLOB LUA_SOURCES ${LUA_PATH}/*.c) 
-list(REMOVE_ITEM LUA_SOURCES ${LUA_PATH}/lua.c)
 add_library(lua STATIC ${LUA_SOURCES})
 
 add_subdirectory(thirdparty/sol2 )
@@ -94,6 +93,9 @@ else()
 	target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC DEVELOPLEMT_BUILD=1) 
 
 endif()
+
+# Need to add this when adding lua as dependency
+target_compile_definitions(lua PRIVATE MAKE_LIB)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SDL3::SDL3

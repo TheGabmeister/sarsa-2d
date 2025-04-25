@@ -43,11 +43,12 @@ Game::~Game() {
 }
 
 void Game::Initialize() {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         Logger::Err("Error initializing SDL.");
+
         return;
     }
-    if (TTF_Init() != 0) {
+    if (TTF_Init() == 0) {
         Logger::Err("Error initializing SDL TTF.");
         return;
     }
@@ -67,7 +68,7 @@ void Game::Initialize() {
         Logger::Err("Error creating SDL window.");
         return;
     }
-    renderer = SDL_CreateRenderer(window, "game-renderer");
+    renderer = SDL_CreateRenderer(window, NULL);
     if (!renderer) {
         Logger::Err("Error creating SDL renderer.");
         return;
