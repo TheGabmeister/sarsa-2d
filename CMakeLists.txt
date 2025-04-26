@@ -112,13 +112,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/lua"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui"
+	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/backends"
 )
 #target_include_directories(SDL3_mixer PRIVATE
 #	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include"
 #	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL_mixer/Xcode/iOS/SDL2.framework/Headers"
 	#E:\Personal_Projects\2025\Game Engine 2D\pikuma-2d-engine\thirdparty\SDL_mixer\Xcode\iOS\SDL2.framework\Headers\SDL_rwops.h
 #)
-target_include_directories(imgui PUBLIC 
+target_include_directories(imgui PRIVATE 
 	${IMGUI_PATH}
 	${IMGUI_PATH}/backends
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include"
