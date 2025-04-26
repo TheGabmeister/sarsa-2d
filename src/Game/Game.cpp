@@ -52,12 +52,14 @@ void Game::Initialize() {
         Logger::Err("Error initializing SDL TTF.");
         return;
     }
+    SDL_Init(SDL_INIT_AUDIO);
+
     //SDL_DisplayMode displayMode;
     //SDL_GetCurrentDisplayMode(0, &displayMode);
     //windowWidth = displayMode.w;
     //windowHeight = displayMode.h;
-    windowWidth = 800;
-    windowHeight = 600;
+    windowWidth = 1280;
+    windowHeight = 960;
     window = SDL_CreateWindow(
         "pikuma-2d-engine",
         windowWidth,
@@ -187,7 +189,7 @@ void Game::Render() {
     registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
     if (isDebug) {
         registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
-        registry->GetSystem<RenderGUISystem>().Update(registry, camera);
+        registry->GetSystem<RenderGUISystem>().Update(registry, camera, renderer);
     }
 
     SDL_RenderPresent(renderer);

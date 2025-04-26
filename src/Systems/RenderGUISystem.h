@@ -16,7 +16,10 @@ class RenderGUISystem: public System {
     public:
         RenderGUISystem() = default;
 
-        void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera) {
+        void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera, SDL_Renderer* renderer) {
+            
+            ImGui_ImplSDLRenderer3_NewFrame();
+            ImGui_ImplSDL3_NewFrame();
             ImGui::NewFrame();
 
             // Display a window to customize and create new enemies
@@ -115,7 +118,7 @@ class RenderGUISystem: public System {
             ImGui::End();
 
             ImGui::Render();
-            //ImGuiSDL::Render(ImGui::GetDrawData());
+            ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
             
         }
 };
