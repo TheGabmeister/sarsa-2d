@@ -14,8 +14,10 @@
 
 class RenderGUISystem: public System {
     public:
-        RenderGUISystem() = default;
-
+        RenderGUISystem() {
+            ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        }
+           
         void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera, SDL_Renderer* renderer) {
             
             ImGui_ImplSDLRenderer3_NewFrame();
