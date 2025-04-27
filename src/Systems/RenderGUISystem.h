@@ -8,11 +8,16 @@
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
 #include "../Components/HealthComponent.h"
+#include "AssetStore/AssetBrowser.h"
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 
+
 class RenderGUISystem: public System {
+    
+    private:
+        AssetBrowser assets_browser;
     public:
         RenderGUISystem() {
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -33,9 +38,9 @@ class RenderGUISystem: public System {
                 ); 
             }
 
-
             bool show_demo_window = true;
             ImGui::ShowDemoWindow(&show_demo_window);
+            assets_browser.Draw("Example: Assets Browser", &show_demo_window);
             
             // Dock the window to the right of the screen.
             ImGui::SetNextWindowPos(
@@ -143,6 +148,8 @@ class RenderGUISystem: public System {
             ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
             
         }
+
+    
 };
 
 #endif
