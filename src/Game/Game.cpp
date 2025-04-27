@@ -186,10 +186,10 @@ void Game::Render() {
     registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
     registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
     registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
-    if (isDebug) {
+    //if (isDebug) {
         registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
         registry->GetSystem<RenderGUISystem>().Update(registry, camera, renderer);
-    }
+    //}
 
     SDL_RenderPresent(renderer);
 }

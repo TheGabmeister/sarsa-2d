@@ -32,7 +32,18 @@ class RenderGUISystem: public System {
                     ImGuiDockNodeFlags_PassthruCentralNode
                 ); 
             }
+
+
+            bool show_demo_window = true;
+            ImGui::ShowDemoWindow(&show_demo_window);
             
+            // Dock the window to the right of the screen.
+            ImGui::SetNextWindowPos(
+                ImVec2(ImGui::GetMainViewport()->WorkPos.x + ImGui::GetMainViewport()->WorkSize.x, ImGui::GetMainViewport()->WorkPos.y), 
+                ImGuiCond_Once, 
+                ImVec2(1.0f, 0.0f)
+            );
+
             // Display a window to customize and create new enemies
             if (ImGui::Begin("Spawn enemies")) {
                 // Static variables to hold input values
