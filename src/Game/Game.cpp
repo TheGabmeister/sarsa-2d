@@ -43,7 +43,7 @@ Game::~Game() {
 }
 
 void Game::Initialize() {
-    if (SDL_Init(SDL_INIT_VIDEO) == 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == 0) {
         Logger::Err("Error initializing SDL.");
 
         return;
@@ -52,7 +52,6 @@ void Game::Initialize() {
         Logger::Err("Error initializing SDL TTF.");
         return;
     }
-    SDL_Init(SDL_INIT_AUDIO);
 
     //SDL_DisplayMode displayMode;
     //SDL_GetCurrentDisplayMode(0, &displayMode);

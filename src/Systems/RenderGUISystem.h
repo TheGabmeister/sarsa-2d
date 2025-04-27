@@ -24,6 +24,15 @@ class RenderGUISystem: public System {
             ImGui_ImplSDL3_NewFrame();
             ImGui::NewFrame();
 
+            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DockingEnable) 
+            { 
+                ImGui::DockSpaceOverViewport(
+                    ImGui::GetMainViewport()->ID,
+                    ImGui::GetMainViewport(),
+                    ImGuiDockNodeFlags_PassthruCentralNode
+                ); 
+            }
+            
             // Display a window to customize and create new enemies
             if (ImGui::Begin("Spawn enemies")) {
                 // Static variables to hold input values
