@@ -21,6 +21,7 @@ class RenderGUISystem: public System {
         ImGuiIO& io = ImGui::GetIO();
         ImGuiStyle& style = ImGui::GetStyle();
         ImVec4(&colors)[ImGuiCol_COUNT] = ImGui::GetStyle().Colors;
+
     public:
         RenderGUISystem() 
         {
@@ -138,18 +139,23 @@ class RenderGUISystem: public System {
             
             // Set position and size for the toolbar
             ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()), ImGuiCond_Always);
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 30), ImGuiCond_Always);
+            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 60), ImGuiCond_Always);
 
             ImGuiWindowFlags toolbarFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
             if (ImGui::Begin("Toolbar", nullptr, toolbarFlags))
             {
-                // Add toolbar buttons or icons here
-                if (ImGui::Button("Play")) { /* Handle Play action */ }
+                
+                // Use an image button instead of a text button
+                ImTextureID playIcon = io.Fonts->TexID;
+                if (ImGui::ImageButton("play", playIcon, ImVec2(32, 32))) { /* Handle Play action */ }
+                ImGui::SameLine(); 
+                ImTextureID pauseIcon = io.Fonts->TexID; 
+                if (ImGui::ImageButton("pause", pauseIcon, ImVec2(32, 32))) { /* Handle Stop action */ }
                 ImGui::SameLine();
-                if (ImGui::Button("Pause")) { /* Handle Pause action */ }
-                ImGui::SameLine();
-                if (ImGui::Button("Stop")) { /* Handle Stop action */ }
+                ImTextureID stopIcon = io.Fonts->TexID;
+                if (ImGui::ImageButton("stop", stopIcon, ImVec2(32, 32))) { /* Handle Stop action */ }
+
             }
 
             ImGui::End();
