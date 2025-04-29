@@ -8,19 +8,22 @@
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
 #include "../Components/HealthComponent.h"
-#include "AssetStore/AssetBrowser.h"
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 
 
 class RenderGUISystem: public System {
-    
+
     private:
-        AssetBrowser assets_browser;
+        ImGuiIO& io = ImGui::GetIO();
+        ImFont* arialFont = io.Fonts->AddFontFromFileTTF("E:\\Personal_Projects\\2025\\Game Engine\\pikuma-2d-engine\\thirdparty\\imgui\\misc\\fonts\\ProggyClean.ttf", 18);
     public:
         RenderGUISystem() {
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+
+
         }
            
         void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera, SDL_Renderer* renderer) {
@@ -40,8 +43,7 @@ class RenderGUISystem: public System {
 
             bool show_demo_window = true;
             ImGui::ShowDemoWindow(&show_demo_window);
-            assets_browser.Draw("Example: Assets Browser", &show_demo_window);
-            
+
             // Dock the window to the right of the screen.
             ImGui::SetNextWindowPos(
                 ImVec2(ImGui::GetMainViewport()->WorkPos.x + ImGui::GetMainViewport()->WorkSize.x, ImGui::GetMainViewport()->WorkPos.y), 
@@ -51,6 +53,20 @@ class RenderGUISystem: public System {
 
             // Display a window to customize and create new enemies
             if (ImGui::Begin("Spawn enemies")) {
+
+                // Check if font loaded successfully
+                if (arialFont != NULL) {
+                    // Complete font atlas building
+                    //io.Fonts->Build();
+                    // Only push if successful
+                    ImGui::PushFont(arialFont);
+                }
+                else {
+                    Logger::Err("Failed to load ImGui font!");
+                    // Continue with default font
+                    io.Fonts->Build();
+                }
+
                 // Static variables to hold input values
                 static int posX = 0;
                 static int posY = 0;
@@ -128,6 +144,8 @@ class RenderGUISystem: public System {
                     projSpeed = 100;
                     health = 100;
                 }
+
+                ImGui::PopFont();
             }
             ImGui::End();
 
