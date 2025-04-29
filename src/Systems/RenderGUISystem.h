@@ -99,6 +99,61 @@ class RenderGUISystem: public System {
 
             bool show_demo_window = true;
             ImGui::ShowDemoWindow(&show_demo_window);
+
+            // Add a menu bar at the top of the screen
+            if (ImGui::BeginMainMenuBar())
+            {
+                if (ImGui::BeginMenu("File"))
+                {
+                    if (ImGui::MenuItem("New Scene")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Open Scene", "Ctrl+O")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Save Scene")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Save Scene As", "Ctrl+S")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("New Project")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Open Project")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Save Project")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Exit", "Alt+F4")) { /* Handle action here */ }
+                    ImGui::EndMenu();
+                }
+
+                if (ImGui::BeginMenu("Edit"))
+                {
+                    if (ImGui::MenuItem("Undo", "Ctrl+Z")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Redo", "Ctrl+Y")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Project Settings")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Preferences")) { /* Handle action here */ }
+                    ImGui::EndMenu();
+                }
+
+                if (ImGui::BeginMenu("Help"))
+                {
+                    if (ImGui::MenuItem("Search Documentation")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("Check for Updates")) { /* Handle action here */ }
+                    if (ImGui::MenuItem("About...")) { /* Handle action here */ }
+                    ImGui::EndMenu();
+                }
+
+                ImGui::EndMainMenuBar();
+            }
+            
+            // Set position and size for the toolbar
+            ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()), ImGuiCond_Always);
+            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 30), ImGuiCond_Always);
+
+            ImGuiWindowFlags toolbarFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+
+            if (ImGui::Begin("Toolbar", nullptr, toolbarFlags))
+            {
+                // Add toolbar buttons or icons here
+                if (ImGui::Button("Play")) { /* Handle Play action */ }
+                ImGui::SameLine();
+                if (ImGui::Button("Pause")) { /* Handle Pause action */ }
+                ImGui::SameLine();
+                if (ImGui::Button("Stop")) { /* Handle Stop action */ }
+            }
+
+            ImGui::End();
+
 /*
             // Dock the window to the right of the screen.
             ImGui::SetNextWindowPos(
