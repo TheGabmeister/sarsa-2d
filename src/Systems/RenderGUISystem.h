@@ -20,6 +20,7 @@ class RenderGUISystem: public System {
     private:
         ImGuiIO& io = ImGui::GetIO();
         ImGuiStyle& style = ImGui::GetStyle();
+        ImVec4(&colors)[ImGuiCol_COUNT] = ImGui::GetStyle().Colors;
     public:
         RenderGUISystem() 
         {
@@ -28,20 +29,53 @@ class RenderGUISystem: public System {
             io.Fonts->AddFontDefault();
 
             // Add all .ttf in fonts folder
-            for (const auto& entry : std::filesystem::directory_iterator(RESOURCES_PATH"fonts")) {
-                if (entry.path().extension() == ".ttf") {
-                    io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), 18);
-                }
-            }
+            //for (const auto& entry : std::filesystem::directory_iterator(RESOURCES_PATH"fonts")) {
+            //    if (entry.path().extension() == ".ttf") {
+            //        io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), 18);
+            //    }
+            //}
 
             // Load a font and set it as the default font
-            ImFont* customFont = io.Fonts->AddFontFromFileTTF(RESOURCES_PATH"fonts/Cousine-Regular.ttf", 18);
+            ImFont* customFont = io.Fonts->AddFontFromFileTTF(RESOURCES_PATH"fonts/Cousine-Regular.ttf", 20);
             if (customFont) {
                 io.FontDefault = customFont; // Set the loaded font as the default font
             }
 
             // Change style
             style.FrameRounding = 12.0f;
+            style.GrabRounding = 12.0f;
+            style.TabBorderSize = 1.0f;
+            style.WindowMenuButtonPosition = ImGuiDir_None;
+
+            colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
+
+            // Headers
+            colors[ImGuiCol_Header] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+            colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+            colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+            // Buttons
+            colors[ImGuiCol_Button] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+            colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+            colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+            // Frame BG
+            colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+            colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+            colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+            // Tabs
+            colors[ImGuiCol_Tab] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+            colors[ImGuiCol_TabHovered] = ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f };
+            colors[ImGuiCol_TabActive] = ImVec4{ 0.28f, 0.2805f, 0.281f, 1.0f };
+            colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+            colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+
+            // Title
+            colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+            colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+            colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
         }
            
         void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera, SDL_Renderer* renderer) 
