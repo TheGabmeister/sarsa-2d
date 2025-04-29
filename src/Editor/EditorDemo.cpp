@@ -356,7 +356,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
 
     demo_data.ShowAppAssetsBrowser = true;
     demo_data.ShowAppPropertyEditor = true;
-    //demo_data.ShowAppDocuments = true;
+    demo_data.ShowStyleEditor = true;
     demo_data.ShowAppConsole = true;
     demo_data.ShowAppLog = true;
 
@@ -10630,7 +10630,7 @@ struct ExampleAssetsBrowser
     bool            AllowSorting = true;
     bool            AllowDragUnselected = false;
     bool            AllowBoxSelect = true;
-    float           IconSize = 32.0f;
+    float           IconSize = 128.0f;
     int             IconSpacing = 10;
     int             IconHitSpacing = 4;         // Increase hit-spacing if you want to make it possible to clear or box-select from gaps. Some spacing is required to able to amend with Shift+box-select. Value is small in Explorer.
     bool            StretchSpacing = true;
@@ -10655,7 +10655,7 @@ struct ExampleAssetsBrowser
     // Functions
     ExampleAssetsBrowser()
     {
-        AddItems(10000);
+        AddItems(10);
     }
     void AddItems(int count)
     {
@@ -10972,7 +10972,7 @@ void ShowExampleAppAssetsBrowser(bool* p_open)
 {
     IMGUI_DEMO_MARKER("Examples/Assets Browser");
     static ExampleAssetsBrowser assets_browser;
-    assets_browser.Draw("Example: Assets Browser", p_open);
+    assets_browser.Draw("Textures", p_open);
 }
 
 // End of Demo code

@@ -1,6 +1,7 @@
 #ifndef RENDERGUISYSTEM_H
 #define RENDERGUISYSTEM_H
 
+#include <filesystem> 
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RigidBodyComponent.h"
@@ -12,22 +13,39 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
 
+// Documentation: https://github.com/ocornut/imgui/blob/master/docs/FONTS.md
 
 class RenderGUISystem: public System {
 
     private:
         ImGuiIO& io = ImGui::GetIO();
-        ImFont* arialFont = io.Fonts->AddFontFromFileTTF("E:\\Personal_Projects\\2025\\Game Engine\\pikuma-2d-engine\\thirdparty\\imgui\\misc\\fonts\\ProggyClean.ttf", 18);
+        ImGuiStyle& style = ImGui::GetStyle();
     public:
-        RenderGUISystem() {
+        RenderGUISystem() 
+        {
             ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+            io.Fonts->AddFontDefault();
 
+            // Add all .ttf in fonts folder
+            for (const auto& entry : std::filesystem::directory_iterator(RESOURCES_PATH"fonts")) {
+                if (entry.path().extension() == ".ttf") {
+                    io.Fonts->AddFontFromFileTTF(entry.path().string().c_str(), 18);
+                }
+            }
 
+            // Load a font and set it as the default font
+            ImFont* customFont = io.Fonts->AddFontFromFileTTF(RESOURCES_PATH"fonts/Cousine-Regular.ttf", 18);
+            if (customFont) {
+                io.FontDefault = customFont; // Set the loaded font as the default font
+            }
+
+            // Change style
+            style.FrameRounding = 12.0f;
         }
            
-        void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera, SDL_Renderer* renderer) {
-            
+        void Update(const std::unique_ptr<Registry>& registry, const SDL_Rect& camera, SDL_Renderer* renderer) 
+        {
             ImGui_ImplSDLRenderer3_NewFrame();
             ImGui_ImplSDL3_NewFrame();
             ImGui::NewFrame();
@@ -43,7 +61,7 @@ class RenderGUISystem: public System {
 
             bool show_demo_window = true;
             ImGui::ShowDemoWindow(&show_demo_window);
-
+/*
             // Dock the window to the right of the screen.
             ImGui::SetNextWindowPos(
                 ImVec2(ImGui::GetMainViewport()->WorkPos.x + ImGui::GetMainViewport()->WorkSize.x, ImGui::GetMainViewport()->WorkPos.y), 
@@ -53,19 +71,6 @@ class RenderGUISystem: public System {
 
             // Display a window to customize and create new enemies
             if (ImGui::Begin("Spawn enemies")) {
-
-                // Check if font loaded successfully
-                if (arialFont != NULL) {
-                    // Complete font atlas building
-                    //io.Fonts->Build();
-                    // Only push if successful
-                    ImGui::PushFont(arialFont);
-                }
-                else {
-                    Logger::Err("Failed to load ImGui font!");
-                    // Continue with default font
-                    io.Fonts->Build();
-                }
 
                 // Static variables to hold input values
                 static int posX = 0;
@@ -144,8 +149,6 @@ class RenderGUISystem: public System {
                     projSpeed = 100;
                     health = 100;
                 }
-
-                ImGui::PopFont();
             }
             ImGui::End();
 
@@ -161,7 +164,7 @@ class RenderGUISystem: public System {
                 );
             }
             ImGui::End();
-
+*/
             ImGui::Render();
             ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
             
