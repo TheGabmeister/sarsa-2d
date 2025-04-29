@@ -12,6 +12,9 @@
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
+#include <SDL3_image/SDL_image.h>
+#include <string>
+#include <string.h>
 
 // Documentation: https://github.com/ocornut/imgui/blob/master/docs/FONTS.md
 
@@ -164,8 +167,9 @@ class RenderGUISystem: public System {
                 ImGui::SameLine();
                 ImTextureID stopIcon = io.Fonts->TexID;
                 if (ImGui::ImageButton("stop", stopIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Stop action */ }
+                ImGui::SameLine();
 
-
+                AddButtonToToolbar(RESOURCES_PATH"images/tank-panther-down.png", renderer);
             }
 
             ImGui::End();
@@ -279,7 +283,28 @@ class RenderGUISystem: public System {
             
         }
 
-    
+        void AddButtonToToolbar(const char *path, SDL_Renderer* renderer)
+        {
+            SDL_Surface* toolSurface = IMG_Load(path);
+            if (!toolSurface) {
+                SDL_Log("Failed to load image");
+            }
+            else {
+                SDL_Texture* toolTexture = SDL_CreateTextureFromSurface(renderer, toolSurface);
+                SDL_DestroySurface(toolSurface);
+
+                if (!toolTexture) {
+                    SDL_Log("Failed to create texture: %s", SDL_GetError());
+                }
+                else {
+                    // Render the buttons with the loaded texture
+                    ImTextureID toolIcon = (ImTextureID)toolTexture;
+                    if (ImGui::ImageButton("tool", toolIcon, ImVec2(32.0f, 32.0f))) {
+                        /* Handle Tool action */
+                    }
+                }
+            }
+        }
 };
 
 #endif
