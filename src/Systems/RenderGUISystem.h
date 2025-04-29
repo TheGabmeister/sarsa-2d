@@ -145,16 +145,26 @@ class RenderGUISystem: public System {
 
             if (ImGui::Begin("Toolbar", nullptr, toolbarFlags))
             {
-                
-                // Use an image button instead of a text button
+                // Calculate the center position for the buttons
+                float toolbarWidth = ImGui::GetIO().DisplaySize.x;
+                float buttonWidth = 32.0f; // Width of each button
+                float buttonSpacing = ImGui::GetStyle().ItemSpacing.x; // Spacing between buttons
+                float totalButtonWidth = (buttonWidth * 3) + (buttonSpacing * 2); // Total width of all buttons and spacing
+                float offsetX = (toolbarWidth - totalButtonWidth) / 2.0f; // Center offset
+
+                // Add spacing to center the buttons
+                ImGui::SetCursorPosX(offsetX);
+
+                // Render the buttons
                 ImTextureID playIcon = io.Fonts->TexID;
-                if (ImGui::ImageButton("play", playIcon, ImVec2(32, 32))) { /* Handle Play action */ }
-                ImGui::SameLine(); 
-                ImTextureID pauseIcon = io.Fonts->TexID; 
-                if (ImGui::ImageButton("pause", pauseIcon, ImVec2(32, 32))) { /* Handle Stop action */ }
+                if (ImGui::ImageButton("play", playIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Play action */ }
+                ImGui::SameLine();
+                ImTextureID pauseIcon = io.Fonts->TexID;
+                if (ImGui::ImageButton("pause", pauseIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Pause action */ }
                 ImGui::SameLine();
                 ImTextureID stopIcon = io.Fonts->TexID;
-                if (ImGui::ImageButton("stop", stopIcon, ImVec2(32, 32))) { /* Handle Stop action */ }
+                if (ImGui::ImageButton("stop", stopIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Stop action */ }
+
 
             }
 
