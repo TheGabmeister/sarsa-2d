@@ -50,6 +50,7 @@ class RenderGUISystem: public System {
             style.GrabRounding = 12.0f;
             style.TabBorderSize = 1.0f;
             style.WindowMenuButtonPosition = ImGuiDir_None;
+            
 
             colors[ImGuiCol_Text] = ImVec4{ 0.9f, 0.9f, 0.9f, 1.0f };
 
@@ -101,8 +102,6 @@ class RenderGUISystem: public System {
                 ); 
             }
 
-
-
             // Add a menu bar at the top of the screen
             if (ImGui::BeginMainMenuBar())
             {
@@ -139,24 +138,10 @@ class RenderGUISystem: public System {
                 ImGui::EndMainMenuBar();
             }
 
-            
-
-            // Set position and size for the toolbar
-            ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()), ImGuiCond_Always);
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 48), ImGuiCond_Always);
-
-            ImGuiWindowFlags toolbarFlags =
-                ImGuiWindowFlags_NoTitleBar;
-/*                ImGuiWindowFlags_NoResize |
-                //ImGuiWindowFlags_NoMove |
-                ImGuiWindowFlags_NoScrollbar |
-                ImGuiWindowFlags_NoScrollWithMouse;
-                //ImGuiWindowFlags_NoDocking;
-*/
-            if (ImGui::Begin("Toolbar", nullptr, toolbarFlags))
+            if (ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoTitleBar))
             {
                 // Calculate the center position for the buttons
-                float toolbarWidth = ImGui::GetIO().DisplaySize.x;
+                float toolbarWidth = ImGui::GetContentRegionAvail().x;
                 float buttonWidth = 32.0f; // Width of each button
                 float buttonSpacing = ImGui::GetStyle().ItemSpacing.x; // Spacing between buttons
                 float totalButtonWidth = (buttonWidth * 3) + (buttonSpacing * 2); // Total width of all buttons and spacing

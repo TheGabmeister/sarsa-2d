@@ -356,7 +356,6 @@ void ImGui::ShowDemoWindow(bool* p_open)
 
     demo_data.ShowAppAssetsBrowser = true;
     demo_data.ShowAppPropertyEditor = true;
-    demo_data.ShowStyleEditor = true;
     demo_data.ShowAppConsole = true;
     demo_data.ShowAppLog = true;
 
