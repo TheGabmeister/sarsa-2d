@@ -101,8 +101,7 @@ class RenderGUISystem: public System {
                 ); 
             }
 
-            bool show_demo_window = true;
-            ImGui::ShowDemoWindow(&show_demo_window);
+
 
             // Add a menu bar at the top of the screen
             if (ImGui::BeginMainMenuBar())
@@ -139,13 +138,21 @@ class RenderGUISystem: public System {
 
                 ImGui::EndMainMenuBar();
             }
+
             
+
             // Set position and size for the toolbar
             ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()), ImGuiCond_Always);
-            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 60), ImGuiCond_Always);
+            ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 48), ImGuiCond_Always);
 
-            ImGuiWindowFlags toolbarFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
-
+            ImGuiWindowFlags toolbarFlags =
+                ImGuiWindowFlags_NoTitleBar;
+/*                ImGuiWindowFlags_NoResize |
+                //ImGuiWindowFlags_NoMove |
+                ImGuiWindowFlags_NoScrollbar |
+                ImGuiWindowFlags_NoScrollWithMouse;
+                //ImGuiWindowFlags_NoDocking;
+*/
             if (ImGui::Begin("Toolbar", nullptr, toolbarFlags))
             {
                 // Calculate the center position for the buttons
@@ -158,21 +165,17 @@ class RenderGUISystem: public System {
                 // Add spacing to center the buttons
                 ImGui::SetCursorPosX(offsetX);
 
-                // Render the buttons
-                ImTextureID playIcon = io.Fonts->TexID;
-                if (ImGui::ImageButton("play", playIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Play action */ }
+                AddButtonToToolbar(RESOURCES_PATH"images/icon-play.png", renderer);
                 ImGui::SameLine();
-                ImTextureID pauseIcon = io.Fonts->TexID;
-                if (ImGui::ImageButton("pause", pauseIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Pause action */ }
+                AddButtonToToolbar(RESOURCES_PATH"images/icon-pause.png", renderer);
                 ImGui::SameLine();
-                ImTextureID stopIcon = io.Fonts->TexID;
-                if (ImGui::ImageButton("stop", stopIcon, ImVec2(buttonWidth, buttonWidth))) { /* Handle Stop action */ }
-                ImGui::SameLine();
-
-                AddButtonToToolbar(RESOURCES_PATH"images/tank-panther-down.png", renderer);
+                AddButtonToToolbar(RESOURCES_PATH"images/icon-stop.png", renderer);
             }
-
             ImGui::End();
+
+
+            bool show_demo_window = true;
+            ImGui::ShowDemoWindow(&show_demo_window);
 
 /*
             // Dock the window to the right of the screen.
@@ -299,7 +302,7 @@ class RenderGUISystem: public System {
                 else {
                     // Render the buttons with the loaded texture
                     ImTextureID toolIcon = (ImTextureID)toolTexture;
-                    if (ImGui::ImageButton("tool", toolIcon, ImVec2(32.0f, 32.0f))) {
+                    if (ImGui::ImageButton("tool", toolIcon, ImVec2(24.0f, 24.0f))) {
                         /* Handle Tool action */
                     }
                 }
