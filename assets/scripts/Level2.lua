@@ -4,6 +4,7 @@ Level = {
     ----------------------------------------------------
     assets = {
         [0] =
+        { type = "texture", id = "background",                  file = "./assets/private/background.png" },
         { type = "texture", id = "tilemap-texture",             file = "./assets/tilemaps/desert.png" },
         { type = "texture", id = "tank-texture",                file = "./assets/images/tank-panther-spritesheet.png" },
         { type = "texture", id = "su27-texture",                file = "./assets/images/su27-spritesheet.png" },
@@ -95,6 +96,22 @@ Level = {
     ----------------------------------------------------
     entities = {
         [0] =
+        {
+            -- background
+            components = {
+                transform = {
+                    position = { x = 780, y = 480 },
+                    scale = { x = 1.5, y = 1.5 },
+                    rotation = 0.0, -- degrees
+                },
+                sprite = {
+                    texture_asset_id = "background",
+                    width = 32,
+                    height = 32,
+                    z_index = 1
+                }
+            }
+        },
         {
             -- Player
             tag = "player",
