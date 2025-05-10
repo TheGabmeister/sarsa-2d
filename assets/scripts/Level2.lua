@@ -2621,6 +2621,9 @@ Level = {
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
+                direction = {
+                    movement_direction = { x = 1, y = 0 }
+                },
                 rigidbody = {
                     velocity = { x = 0.0, y = 0.0 }
                 },
@@ -2646,18 +2649,19 @@ Level = {
                     function(entity, delta_time, ellapsed_time)
                         -- Move the airplane left to right and back, cycling every three seconds
                         local start_x, start_y = 900, 500
-                        local end_x = start_x + 330
+                        local amplitude = 330
                         local end_y = start_y + 0
                         local speed = 100
+                        local direction = get_movement_direction(entity)
+                        print("direction:", direction)
 
                         -- Move the entity 1 pixel to the right per second, frame-rate independent
                         local current_x, current_y = get_position(entity)
-                        if current_x > end_x then
-                            set_position(entity, current_x + -speed * delta_time, end_y)
-                        else
-                            set_position(entity, current_x + speed * delta_time, end_y)
+                        if current_x > start_x + amplitude or current_x < start_x - amplitude then 
+                            set_movement_direction(entity, -direction, 0 );
+                            direction = -direction
                         end
-                        
+                        set_position(entity, current_x + direction * speed * delta_time, end_y)
 
                         -- Set rotation to 0 (facing right) or 180 (facing left) based on direction
                         local angle_in_degrees = pingpong < 0.5 and 0 or 180

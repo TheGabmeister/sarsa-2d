@@ -4,6 +4,7 @@
 #include "../ECS/ECS.h"
 #include "../Components/ScriptComponent.h"
 #include "../Components/TransformComponent.h"
+#include "../Components/DirectionComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "../Components/AnimationComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
@@ -14,6 +15,17 @@ std::tuple<double, double> GetEntityPosition(Entity entity) {
         const auto transform = entity.GetComponent<TransformComponent>();
         return std::make_tuple(transform.position.x, transform.position.y);
     } else {
+        Logger::Err("Trying to get the position of an entity that has no transform component");
+        return std::make_tuple(0.0, 0.0);
+    }
+}
+
+std::tuple<double, double> GetEntityMovementDirection(Entity entity) {
+    if (entity.HasComponent<DirectionComponent>()) {
+        const auto direction = entity.GetComponent<DirectionComponent>();
+        return std::make_tuple(direction.movement_direction.x, direction.movement_direction.y);
+    }
+    else {
         Logger::Err("Trying to get the position of an entity that has no transform component");
         return std::make_tuple(0.0, 0.0);
     }
@@ -35,6 +47,17 @@ void SetEntityPosition(Entity entity, double x, double y) {
         transform.position.x = x;
         transform.position.y = y;
     } else {
+        Logger::Err("Trying to set the position of an entity that has no transform component");
+    }
+}
+
+void SetEntityMovementDirection(Entity entity, double x, double y) {
+    if (entity.HasComponent<DirectionComponent>()) {
+        auto& direction = entity.GetComponent<DirectionComponent>();
+        direction.movement_direction.x = x;
+        direction.movement_direction.y = y;
+    }
+    else {
         Logger::Err("Trying to set the position of an entity that has no transform component");
     }
 }
@@ -95,6 +118,8 @@ class ScriptSystem: public System {
 
             // Create all the bindings between C++ and Lua functions
             lua.set_function("get_position", GetEntityPosition);
+            lua.set_function("get_movement_direction", GetEntityMovementDirection);
+            lua.set_function("set_movement_direction", SetEntityMovementDirection);
             lua.set_function("get_velocity", GetEntityVelocity);
             lua.set_function("set_position", SetEntityPosition);
             lua.set_function("set_velocity", SetEntityVelocity);

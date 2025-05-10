@@ -4,10 +4,10 @@
 #include <glm/glm.hpp>
 
 struct DirectionComponent {
-    glm::vec2 direction;
+    glm::vec2 movement_direction;
 
-    DirectionComponent(glm::vec2 direction = glm::vec2(0, 0)) {
-        this->direction = direction;
+    DirectionComponent(glm::vec2 movement_direction = glm::vec2(0, 0)) {
+        this->movement_direction = movement_direction;
     }
 };
 

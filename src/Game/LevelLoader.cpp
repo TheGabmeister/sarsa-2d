@@ -252,8 +252,8 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
             if (direction != sol::nullopt) {
                 newEntity.AddComponent<DirectionComponent>(
                     glm::vec2(
-                        entity["components"]["direction"]["x"],
-                        entity["components"]["direction"]["y"]
+                        entity["components"]["direction"]["movement_direction"]["x"],
+                        entity["components"]["direction"]["movement_direction"]["y"]
                     )
                 );
             }
