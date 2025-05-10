@@ -149,10 +149,10 @@ Level = {
                     friendly = true
                 },
                 keyboard_controller = {
-                    up_velocity = { x = 0, y = -90 },
-                    right_velocity = { x = 90, y = 0 },
-                    down_velocity = { x = 0, y = 90 },
-                    left_velocity = { x = -90, y = 0 }
+                    up_velocity = { x = 0, y = -150 },
+                    right_velocity = { x = 150, y = 0 },
+                    down_velocity = { x = 0, y = 150 },
+                    left_velocity = { x = -150, y = 0 }
                 },
                 camera_follow = {
                     follow = true
@@ -2607,6 +2607,60 @@ Level = {
 
                         -- change the rotation of the sprite to match the circular motion
                         local angle_in_degrees = 180 + angle * 180 / math.pi
+                        set_rotation(entity, angle_in_degrees)
+                    end
+                }
+            }
+        },
+        {
+            -- Bomber airplane
+            group = "enemies",
+            components = {
+                transform = {
+                    position = { x = 900, y = 500 },
+                    scale = { x = 1.0, y = 1.0 },
+                    rotation = 0.0, -- degrees
+                },
+                rigidbody = {
+                    velocity = { x = 0.0, y = 0.0 }
+                },
+                sprite = {
+                    texture_asset_id = "bomber-texture",
+                    width = 32,
+                    height = 24,
+                    z_index = 8
+                },
+                animation = {
+                    num_frames = 2,
+                    speed_rate = 10 -- fps
+                },
+                boxcollider = {
+                    width = 32,
+                    height = 24
+                },
+                health = {
+                    health_percentage = 100
+                },
+                on_update_script = {
+                    [0] =
+                    function(entity, delta_time, ellapsed_time)
+                        -- Move the airplane left to right and back, cycling every three seconds
+                        local start_x, start_y = 900, 500
+                        local end_x = start_x + 330
+                        local end_y = start_y + 0
+                        local speed = 100
+
+                        -- Move the entity 1 pixel to the right per second, frame-rate independent
+                        local current_x, current_y = get_position(entity)
+                        if current_x > end_x then
+                            set_position(entity, current_x + -speed * delta_time, end_y)
+                        else
+                            set_position(entity, current_x + speed * delta_time, end_y)
+                        end
+                        
+
+                        -- Set rotation to 0 (facing right) or 180 (facing left) based on direction
+                        local angle_in_degrees = pingpong < 0.5 and 0 or 180
                         set_rotation(entity, angle_in_degrees)
                     end
                 }
