@@ -29,7 +29,7 @@ class KeyboardControlSystem: public System {
                 switch (event.symbol) {
                     case SDLK_UP:
                         rigidbody.velocity = keyboardcontrol.upVelocity;
-                        sprite.srcRect.y = sprite.height * 0;
+                        //sprite.srcRect.y = sprite.height * 0;
                         break;
                     case SDLK_RIGHT:
                         rigidbody.velocity = keyboardcontrol.rightVelocity;
@@ -37,14 +37,15 @@ class KeyboardControlSystem: public System {
                         break;
                     case SDLK_DOWN:
                         rigidbody.velocity = keyboardcontrol.downVelocity;
-                        sprite.srcRect.y = sprite.height * 2;
+                        //sprite.srcRect.y = sprite.height * 2;
                         break;
                     case SDLK_LEFT:
                         rigidbody.velocity = keyboardcontrol.leftVelocity;
-                        sprite.srcRect.y = sprite.height * 3;
+                        sprite.srcRect.y = sprite.height * 2;
                         break;
                     case SDLK_SPACE:
                         rigidbody.velocity = glm::vec2(0.0f, 0.0f);
+                        sprite.srcRect.y = sprite.height * 0;
                         break;
                 }
             }

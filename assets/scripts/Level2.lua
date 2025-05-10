@@ -4,6 +4,7 @@ Level = {
     ----------------------------------------------------
     assets = {
         [0] =
+        { type = "texture", id = "player",                      file = "./assets/private/player.png" },
         { type = "texture", id = "slime",                       file = "./assets/private/slime.png" },
         { type = "texture", id = "background",                  file = "./assets/private/background.png" },
         { type = "texture", id = "tilemap-texture",             file = "./assets/tilemaps/desert.png" },
@@ -119,20 +120,24 @@ Level = {
             components = {
                 transform = {
                     position = { x = 1300, y = 730 },
-                    scale = { x = 1.0, y = 1.0 },
+                    scale = { x = 2.0, y = 2.0 },
                     rotation = 0.0, -- degrees
                 },
                 rigidbody = {
                     velocity = { x = 0.0, y = 0.0 }
                 },
                 sprite = {
-                    texture_asset_id = "tank-texture",
+                    texture_asset_id = "player",
                     width = 32,
                     height = 32,
                     z_index = 6,
                     fixed = false,
                     src_rect_x = 0,
                     src_rect_y = 0
+                },
+                animation = {
+                    num_frames = 11,
+                    speed_rate = 20 -- fps
                 },
                 boxcollider = {
                     width = 32,
@@ -2720,7 +2725,7 @@ Level = {
                             
                         end
                         set_position(entity, start_x, current_y + direction * speed * delta_time)
-                        print(direction)
+
                         -- Set rotation to 0 (facing right) or 180 (facing left) based on direction
                         local angle_in_degrees = pingpong < 0.5 and 0 or 180
                         set_rotation(entity, angle_in_degrees)
