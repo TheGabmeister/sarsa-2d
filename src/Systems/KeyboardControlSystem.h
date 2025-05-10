@@ -43,6 +43,9 @@ class KeyboardControlSystem: public System {
                         rigidbody.velocity = keyboardcontrol.leftVelocity;
                         sprite.srcRect.y = sprite.height * 3;
                         break;
+                    case SDLK_SPACE:
+                        rigidbody.velocity = glm::vec2(0.0f, 0.0f);
+                        break;
                 }
             }
         }
