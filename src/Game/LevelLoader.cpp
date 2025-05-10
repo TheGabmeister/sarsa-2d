@@ -11,6 +11,7 @@
 #include "../Components/HealthComponent.h"
 #include "../Components/TextLabelComponent.h"
 #include "../Components/ScriptComponent.h"
+#include "../Components/DirectionComponent.h"
 #include <fstream>
 #include <string>
 #include <sol/sol.hpp>
@@ -244,6 +245,17 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
             if (script != sol::nullopt) {
                 sol::function func = entity["components"]["on_update_script"][0];
                 newEntity.AddComponent<ScriptComponent>(func);
+            }
+
+            // Direction
+            sol::optional<sol::table> direction = entity["components"]["direction"];
+            if (direction != sol::nullopt) {
+                newEntity.AddComponent<DirectionComponent>(
+                    glm::vec2(
+                        entity["components"]["direction"]["x"],
+                        entity["components"]["direction"]["y"]
+                    )
+                );
             }
         }
         i++;
