@@ -4,6 +4,7 @@ Level = {
     ----------------------------------------------------
     assets = {
         [0] =
+        { type = "texture", id = "slime",                       file = "./assets/private/slime.png" },
         { type = "texture", id = "background",                  file = "./assets/private/background.png" },
         { type = "texture", id = "tilemap-texture",             file = "./assets/tilemaps/desert.png" },
         { type = "texture", id = "tank-texture",                file = "./assets/images/tank-panther-spritesheet.png" },
@@ -117,7 +118,7 @@ Level = {
             tag = "player",
             components = {
                 transform = {
-                    position = { x = 900, y = 540 },
+                    position = { x = 1300, y = 730 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
@@ -2613,12 +2614,12 @@ Level = {
             }
         },
         {
-            -- Bomber airplane
+            -- Slime 1
             group = "enemies",
             components = {
                 transform = {
                     position = { x = 900, y = 500 },
-                    scale = { x = 1.0, y = 1.0 },
+                    scale = { x = -2.0, y = 2.0 },
                     rotation = 0.0, -- degrees
                 },
                 direction = {
@@ -2628,13 +2629,13 @@ Level = {
                     velocity = { x = 0.0, y = 0.0 }
                 },
                 sprite = {
-                    texture_asset_id = "bomber-texture",
-                    width = 32,
-                    height = 24,
+                    texture_asset_id = "slime",
+                    width = 44,
+                    height = 26,
                     z_index = 8
                 },
                 animation = {
-                    num_frames = 2,
+                    num_frames = 5,
                     speed_rate = 10 -- fps
                 },
                 boxcollider = {
@@ -2653,7 +2654,6 @@ Level = {
                         local end_y = start_y + 0
                         local speed = 100
                         local direction = get_movement_direction(entity)
-                        print("direction:", direction)
 
                         -- Move the entity 1 pixel to the right per second, frame-rate independent
                         local current_x, current_y = get_position(entity)
@@ -2663,6 +2663,64 @@ Level = {
                         end
                         set_position(entity, current_x + direction * speed * delta_time, end_y)
 
+                        -- Set rotation to 0 (facing right) or 180 (facing left) based on direction
+                        local angle_in_degrees = pingpong < 0.5 and 0 or 180
+                        set_rotation(entity, angle_in_degrees)
+                    end
+                }
+            }
+        },
+                {
+            -- Slime 2
+            group = "enemies",
+            components = {
+                transform = {
+                    position = { x = 650, y = 700 },
+                    scale = { x = 2.0, y = 2.0 },
+                    rotation = 0.0, -- degrees
+                },
+                direction = {
+                    movement_direction = { x = 0, y = 1 }
+                },
+                rigidbody = {
+                    velocity = { x = 0.0, y = 0.0 }
+                },
+                sprite = {
+                    texture_asset_id = "slime",
+                    width = 44,
+                    height = 26,
+                    z_index = 8
+                },
+                animation = {
+                    num_frames = 5,
+                    speed_rate = 10 -- fps
+                },
+                boxcollider = {
+                    width = 32,
+                    height = 24
+                },
+                health = {
+                    health_percentage = 100
+                },
+                on_update_script = {
+                    [0] =
+                    function(entity, delta_time, ellapsed_time)
+                        -- Move the airplane left to right and back, cycling every three seconds
+                        local start_x, start_y = 650, 700
+                        local amplitude = 100
+                        local speed = 100
+                        local _ , direction = get_movement_direction(entity)
+
+                        -- Move the entity 1 pixel to the right per second, frame-rate independent
+                        local current_x, current_y = get_position(entity)
+                        if current_y > start_y + amplitude or current_y < start_y - amplitude then 
+                            set_movement_direction(entity, 0, -direction );
+                            
+                            direction = -direction
+                            
+                        end
+                        set_position(entity, start_x, current_y + direction * speed * delta_time)
+                        print(direction)
                         -- Set rotation to 0 (facing right) or 180 (facing left) based on direction
                         local angle_in_degrees = pingpong < 0.5 and 0 or 180
                         set_rotation(entity, angle_in_degrees)
