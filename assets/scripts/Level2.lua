@@ -117,7 +117,7 @@ Level = {
             tag = "player",
             components = {
                 transform = {
-                    position = { x = 750, y = 450 },
+                    position = { x = 900, y = 540 },
                     scale = { x = 1.0, y = 1.0 },
                     rotation = 0.0, -- degrees
                 },
@@ -149,10 +149,10 @@ Level = {
                     friendly = true
                 },
                 keyboard_controller = {
-                    up_velocity = { x = 0, y = -30 },
-                    right_velocity = { x = 30, y = 0 },
-                    down_velocity = { x = 0, y = 30 },
-                    left_velocity = { x = -30, y = 0 }
+                    up_velocity = { x = 0, y = -90 },
+                    right_velocity = { x = 90, y = 0 },
+                    down_velocity = { x = 0, y = 90 },
+                    left_velocity = { x = -90, y = 0 }
                 },
                 camera_follow = {
                     follow = true

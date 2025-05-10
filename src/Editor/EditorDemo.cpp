@@ -423,7 +423,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
 
     // Main body of the Demo window starts here.
-    if (!ImGui::Begin("Dear ImGui Demo", p_open, window_flags))
+    if (!ImGui::Begin("Project Settings", p_open, window_flags))
     {
         // Early out if the window is collapsed, as an optimization.
         ImGui::End();
@@ -435,13 +435,13 @@ void ImGui::ShowDemoWindow(bool* p_open)
     //ImGui::PushItemWidth(-ImGui::GetWindowWidth() * 0.35f);   // e.g. Use 2/3 of the space for widgets and 1/3 for labels (right align)
 
     // Menu Bar
-    DemoWindowMenuBar(&demo_data);
+    //DemoWindowMenuBar(&demo_data);
 
-    ImGui::Text("dear imgui says hello! (%s) (%d)", IMGUI_VERSION, IMGUI_VERSION_NUM);
-    ImGui::Spacing();
+    //ImGui::Text("dear imgui says hello! (%s) (%d)", IMGUI_VERSION, IMGUI_VERSION_NUM);
+    //ImGui::Spacing();
 
     IMGUI_DEMO_MARKER("Help");
-    if (ImGui::CollapsingHeader("Help"))
+    if (ImGui::CollapsingHeader("Audio"))
     {
         ImGui::SeparatorText("ABOUT THIS DEMO:");
         ImGui::BulletText("Sections below are demonstrating many aspects of the library.");
@@ -464,7 +464,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     }
 
     IMGUI_DEMO_MARKER("Configuration");
-    if (ImGui::CollapsingHeader("Configuration"))
+    if (ImGui::CollapsingHeader("Editor"))
     {
         ImGuiIO& io = ImGui::GetIO();
 
@@ -665,7 +665,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     }
 
     IMGUI_DEMO_MARKER("Window options");
-    if (ImGui::CollapsingHeader("Window options"))
+    if (ImGui::CollapsingHeader("Graphics"))
     {
         if (ImGui::BeginTable("split", 3))
         {
@@ -4204,7 +4204,7 @@ static void DemoWindowWidgets(ImGuiDemoWindowData* demo_data)
 {
     IMGUI_DEMO_MARKER("Widgets");
     //ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-    if (!ImGui::CollapsingHeader("Widgets"))
+    if (!ImGui::CollapsingHeader("Input Manager"))
         return;
 
     const bool disable_all = demo_data->DisableSections; // The Checkbox for that is inside the "Disabled" section at the bottom
@@ -4253,7 +4253,7 @@ static void DemoWindowWidgets(ImGuiDemoWindowData* demo_data)
 static void DemoWindowLayout()
 {
     IMGUI_DEMO_MARKER("Layout");
-    if (!ImGui::CollapsingHeader("Layout & Scrolling"))
+    if (!ImGui::CollapsingHeader("Packaging"))
         return;
 
     IMGUI_DEMO_MARKER("Layout/Child windows");
@@ -5119,7 +5119,7 @@ static void DemoWindowLayout()
 static void DemoWindowPopups()
 {
     IMGUI_DEMO_MARKER("Popups");
-    if (!ImGui::CollapsingHeader("Popups & Modal windows"))
+    if (!ImGui::CollapsingHeader("Physics 2D"))
         return;
 
     // The properties of popups windows are:
@@ -5584,7 +5584,7 @@ static void DemoWindowTables()
 {
     //ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     IMGUI_DEMO_MARKER("Tables");
-    if (!ImGui::CollapsingHeader("Tables & Columns"))
+    if (!ImGui::CollapsingHeader("Player"))
         return;
 
     // Using those as a base value to create width/height that are factor of the size of our font
@@ -7698,7 +7698,7 @@ static void DemoWindowColumns()
 static void DemoWindowInputs()
 {
     IMGUI_DEMO_MARKER("Inputs & Focus");
-    if (ImGui::CollapsingHeader("Inputs & Focus"))
+    if (ImGui::CollapsingHeader("Tags and Layers"))
     {
         ImGuiIO& io = ImGui::GetIO();
 

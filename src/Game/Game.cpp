@@ -57,8 +57,8 @@ void Game::Initialize() {
     //SDL_GetCurrentDisplayMode(0, &displayMode);
     //windowWidth = displayMode.w;
     //windowHeight = displayMode.h;
-    windowWidth = 1280;
-    windowHeight = 960;
+    windowWidth = 1920;
+    windowHeight = 1080;
     window = SDL_CreateWindow(
         "pikuma-2d-engine",
         windowWidth,
