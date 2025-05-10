@@ -100,14 +100,14 @@ Level = {
             -- background
             components = {
                 transform = {
-                    position = { x = 780, y = 480 },
-                    scale = { x = 1.5, y = 1.5 },
+                    position = { x = 0, y = 100 },
+                    scale = { x = 1.1, y = 1.1 },
                     rotation = 0.0, -- degrees
                 },
                 sprite = {
                     texture_asset_id = "background",
-                    width = 32,
-                    height = 32,
+                    width = 1859,
+                    height = 897,
                     z_index = 1
                 }
             }
