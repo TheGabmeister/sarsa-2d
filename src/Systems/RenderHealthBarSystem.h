@@ -51,9 +51,9 @@ class RenderHealthBarSystem: public System {
                 }
 
                 // Position the health bar indicator in the top-right part of the entity sprite
-                float healthBarWidth = 15;
-                float healthBarHeight = 3;
-                float healthBarPosX = (transform.position.x + (sprite.width * transform.scale.x)) - camera.x;
+                float healthBarWidth = 60;
+                float healthBarHeight = 5;
+                float healthBarPosX = transform.position.x - camera.x;
                 float healthBarPosY = (transform.position.y) - camera.y;
 
                 SDL_FRect healthBarRectangle = {
@@ -81,7 +81,7 @@ class RenderHealthBarSystem: public System {
                     labelHeight
                 };
                 
-                SDL_RenderTexture(renderer, texture, NULL, &healthBarTextRectangle);
+                //SDL_RenderTexture(renderer, texture, NULL, &healthBarTextRectangle);
 
                 SDL_DestroyTexture(texture);
             }

@@ -188,7 +188,7 @@ void Game::Render() {
     registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
     registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
     //if (isDebug) {
-        registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
+        //registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
         registry->GetSystem<RenderGUISystem>().Update(registry, camera, renderer);
     //}
 
